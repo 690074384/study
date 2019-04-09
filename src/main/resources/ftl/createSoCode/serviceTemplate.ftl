@@ -1,12 +1,12 @@
-package com.fh.service.${packageName}.${objectNameLower}.impl;
+package com.lph.service.${packageName}.${objectNameLower}.impl;
 
 import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
-import com.fh.dao.DaoSupport;
-import com.fh.entity.Page;
-import com.fh.util.PageData;
-import com.fh.service.${packageName}.${objectNameLower}.${objectName}Manager;
+import com.lph.dao.DaoSupport;
+import com.lph.entity.Page;
+import com.lph.util.PageData;
+import com.lph.service.${packageName}.${objectNameLower}.${objectName}Manager;
 
 /** 
  * 说明： ${TITLE}

@@ -78,7 +78,7 @@
 													<td class="center">${var.TITLE}</td>
 													<td class="center">${var.PACKAGENAME}</td>
 													<td class="center">${var.OBJECTNAME}</td>
-													<td class="center">${fn:replace(var.TABLENAME, ',fh,', '')}</td>
+													<td class="center">${fn:replace(var.TABLENAME, ',lph,', '')}</td>
 													<td class="center">
 														${var.FHTYPE == "single"?"单表":""}
 														${var.FHTYPE == "tree"?"树形":""}

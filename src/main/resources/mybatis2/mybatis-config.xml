@@ -11,13 +11,13 @@
 
 	<typeAliases>
 		
-		<typeAlias type="com.fh.util.PageData" alias="pd"/>
+		<typeAlias type="com.lph.util.PageData" alias="pd"/>
 		<!-- 分页 -->
-		<typeAlias type="com.fh.entity.Page" alias="Page"/>
+		<typeAlias type="com.lph.entity.Page" alias="Page"/>
 	</typeAliases>
 	
 	<plugins>
-		<plugin interceptor="com.fh.plugin.PagePlugin">
+		<plugin interceptor="com.lph.plugin.PagePlugin">
 			<property name="dialect" value="mysql"/>
 			<property name="pageSqlId" value=".*listPage.*"/>
 		</plugin>

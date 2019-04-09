@@ -274,10 +274,10 @@
 					for(var i=0;i < document.getElementsByName('ids').length;i++){
 					  if(document.getElementsByName('ids')[i].checked){
 					  	if(str=='') str += document.getElementsByName('ids')[i].value;
-					  	else str += ',fh,' + document.getElementsByName('ids')[i].value;
+					  	else str += ',lph,' + document.getElementsByName('ids')[i].value;
 					  	
 					  	if(fid=='') fid += document.getElementsByName('ids')[i].id;
-					  	else fid += ',fh,' + document.getElementsByName('ids')[i].id;
+					  	else fid += ',lph,' + document.getElementsByName('ids')[i].id;
 					  }
 					}
 					if(str==''){
@@ -295,8 +295,8 @@
 						return;
 					}else{
 						if(msg == '确定要批量备份这些表吗？'){
-							var arrTable = str.split(',fh,');
-							var arrFid = fid.split(',fh,');
+							var arrTable = str.split(',lph,');
+							var arrFid = fid.split(',lph,');
 							for(var fhi=0;fhi<arrTable.length;fhi++){
 								backupAjax(arrTable[fhi],arrFid[fhi]);
 							}

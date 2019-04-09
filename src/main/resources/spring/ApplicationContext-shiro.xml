@@ -19,7 +19,7 @@
 		</bean>
 		
 		<!-- 項目自定义的Realm -->
-	    <bean id="ShiroRealm" class="com.fh.interceptor.shiro.ShiroRealm" ></bean>
+	    <bean id="ShiroRealm" class="com.lph.interceptor.shiro.ShiroRealm" ></bean>
 		
 		<!-- Shiro Filter -->
 		<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">

@@ -60,7 +60,7 @@
 	</bean>  
 	<!-- 事物处理 -->
 	<aop:config>
-		<aop:pointcut id="pc" expression="execution(* com.fh.service..*(..))" />
+		<aop:pointcut id="pc" expression="execution(* com.lph.service..*(..))" />
 		<aop:advisor pointcut-ref="pc" advice-ref="txAdvice" />
 	</aop:config>
 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
@@ -112,7 +112,7 @@
          <property name="logAbandoned" value="${logAbandoned2}" />
 	</bean>  
 	<aop:config>
-		<aop:pointcut id="pc2" expression="execution(* com.fh.service..*(..))" />
+		<aop:pointcut id="pc2" expression="execution(* com.lphh.service..*(..))" />
 		<aop:advisor pointcut-ref="pc2" advice-ref="txAdvice2" />
 	</aop:config>
 	<tx:advice id="txAdvice2" transaction-manager="transactionManager2">

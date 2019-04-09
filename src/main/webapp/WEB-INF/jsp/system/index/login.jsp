@@ -249,7 +249,7 @@
 			if(check()){
 				var loginname = $("#loginname").val();
 				var password = $("#password").val();
-				var code = "qq313596790fh"+loginname+",fh,"+password+"QQ978336446fh"+",fh,"+$("#code").val();
+				var code = "qq313596790fh"+loginname+",lph,"+password+"QQ978336446fh"+",lph,"+$("#code").val();
 				$.ajax({
 					type: "POST",
 					url: 'login_login',
@@ -498,7 +498,7 @@
 			$.ajax({
 				type: "POST",
 				url: 'appSysUser/registerSysUser.do',
-		    	data: {USERNAME:$("#USERNAME").val(),PASSWORD:$("#PASSWORD").val(),NAME:$("#name").val(),EMAIL:$("#EMAIL").val(),rcode:$("#rcode").val(),FKEY:$.md5('USERNAME'+nowtime+',fh,'),tm:new Date().getTime()},
+		    	data: {USERNAME:$("#USERNAME").val(),PASSWORD:$("#PASSWORD").val(),NAME:$("#name").val(),EMAIL:$("#EMAIL").val(),rcode:$("#rcode").val(),FKEY:$.md5('USERNAME'+nowtime+',lph,'),tm:new Date().getTime()},
 				dataType:'json',
 				cache: false,
 				success: function(data){

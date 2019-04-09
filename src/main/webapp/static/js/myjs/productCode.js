@@ -134,7 +134,7 @@ $(function(){if('createCode'== locat[3]){locat =  locat[0]+'//'+locat[2];}else{l
 					$("#TITLE").val(data.pd.TITLE + '(明细)');
 					$("#packageName").val(data.pd.PACKAGENAME);
 					$("#objectName").val(data.pd.OBJECTNAME+"Mx");
-					var tb = data.pd.TABLENAME.split(",fh,");
+					var tb = data.pd.TABLENAME.split(",lph,");
 					$("#tabletop").val(tb[0]);
 					$("#faobject").val(data.pd.OBJECTNAME);
 				}
@@ -250,7 +250,7 @@ $(function(){if('createCode'== locat[3]){locat =  locat[0]+'//'+locat[2];}else{l
 		
 		dbz = dbz == '' ? '无':dbz;
 		ddefault = ddefault == '' ? '无':ddefault;
-		var fields = dname + ',fh,' + dtype + ',fh,' + dbz + ',fh,' + isQian + ',fh,' + ddefault + ',fh,' + flength + ',fh,' + decimal;
+		var fields = dname + ',lph,' + dtype + ',lph,' + dbz + ',lph,' + isQian + ',lph,' + ddefault + ',lph,' + flength + ',lph,' + decimal;
 		
 		if(msgIndex == ''){
 			arrayField(fields);
@@ -280,7 +280,7 @@ $(function(){if('createCode'== locat[3]){locat =  locat[0]+'//'+locat[2];}else{l
 	//打开编辑属性(修改)
 	function editField(value,msgIndex){
 		$("#dialog-add").css("display","block");
-		var efieldarray = value.split(',fh,');
+		var efieldarray = value.split(',lph,');
 		$("#dname").val(efieldarray[0]);		//属性名
 		$("#hcdname").val(efieldarray[0]);		//属性名 备份一份
 		$("#dbz").val(efieldarray[2]);			//备注
@@ -360,7 +360,7 @@ $(function(){if('createCode'== locat[3]){locat =  locat[0]+'//'+locat[2];}else{l
 	var index = 0;
 	//追加属性列表
 	function appendC(value){
-		var fieldarray = value.split(',fh,');
+		var fieldarray = value.split(',lph,');
 		$("#fields").append(
 			'<tr>'+
 			'<td class="center">'+Number(index+1)+'</td>'+
@@ -411,7 +411,7 @@ $(function(){if('createCode'== locat[3]){locat =  locat[0]+'//'+locat[2];}else{l
 	//判断属性名是否重复
 	function isSame(value){
 		for(var i=0;i<arField.length;i++){
-			var array0 = arField[i].split(',fh,')[0];
+			var array0 = arField[i].split(',lph,')[0];
 			if(array0 == value){
 				return false;
 			}

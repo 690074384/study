@@ -1,4 +1,4 @@
-package com.fh.entity.${packageName};
+package com.lph.entity.${packageName};
 
 import java.util.List;
 

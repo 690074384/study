@@ -77,12 +77,12 @@
 													if(msg.content.sourceUrl)
 													{
 														//alert("原图已成功保存至服务器，url为：\n" + msg.content.sourceUrl+"\n\n" + "头像已成功保存至服务器，url为：\n" + msg.content.avatarUrls.join("\n\n")+"\n\n");
-														savePhoto(msg.content.sourceUrl+",fh,"+msg.content.avatarUrls.join(",fh,"),"1");
+														savePhoto(msg.content.sourceUrl+",lph,"+msg.content.avatarUrls.join(",lph,"),"1");
 													}
 													else
 													{
 														//alert("头像已成功保存至服务器，url为：\n" + msg.content.avatarUrls.join("\n\n")+"\n\n");
-														savePhoto(msg.content.avatarUrls.join(",fh,"),"2");
+														savePhoto(msg.content.avatarUrls.join(",lph,"),"2");
 													}
 												}
 											break;

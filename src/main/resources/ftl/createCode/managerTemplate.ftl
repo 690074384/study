@@ -1,8 +1,8 @@
-package com.fh.service.${packageName}.${objectNameLower};
+package com.lph.service.${packageName}.${objectNameLower};
 
 import java.util.List;
-import com.fh.entity.Page;
-import com.fh.util.PageData;
+import com.lph.entity.Page;
+import com.lph.util.PageData;
 
 /** 
  * 说明： ${TITLE}接口

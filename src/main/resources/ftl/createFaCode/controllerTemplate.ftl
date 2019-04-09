@@ -1,4 +1,4 @@
-package com.fh.controller.${packageName}.${objectNameLower};
+package com.lph.controller.${packageName}.${objectNameLower};
 
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import com.fh.controller.base.BaseController;
-import com.fh.entity.Page;
-import com.fh.util.AppUtil;
-import com.fh.util.ObjectExcelView;
-import com.fh.util.PageData;
-import com.fh.util.Jurisdiction;
-import com.fh.util.Tools;
-import com.fh.service.${packageName}.${objectNameLower}.${objectName}Manager;
-import com.fh.service.${packageName}.${objectNameLower}mx.${objectName}MxManager;
+import com.lph.controller.base.BaseController;
+import com.lph.entity.Page;
+import com.lph.util.AppUtil;
+import com.lph.util.ObjectExcelView;
+import com.lph.util.PageData;
+import com.lph.util.Jurisdiction;
+import com.lph.util.Tools;
+import com.lph.service.${packageName}.${objectNameLower}.${objectName}Manager;
+import com.lph.service.${packageName}.${objectNameLower}mx.${objectName}MxManager;
 
 /** 
  * 说明：${TITLE}

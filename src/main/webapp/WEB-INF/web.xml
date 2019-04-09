@@ -59,7 +59,7 @@
 
 	<filter>
 		<filter-name>loginFilter</filter-name>
-		<filter-class>com.fh.filter.LoginFilter</filter-class>
+		<filter-class>com.lph.filter.LoginFilter</filter-class>
 	</filter>
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
@@ -85,7 +85,7 @@
 	<!-- tomcat等 启动之前执行 -->
 	<filter>
 		<filter-name>startFilter</filter-name>
-		<filter-class>com.fh.filter.startFilter</filter-class>
+		<filter-class>com.lph.filter.startFilter</filter-class>
 	</filter>
 	
 	<!-- Shiro filter start -->
