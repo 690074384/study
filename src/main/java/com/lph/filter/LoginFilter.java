@@ -1,40 +1,40 @@
 package com.lph.filter;
 
-import java.io.IOException;
-
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.lph.controller.base.BaseController;
 
-/**登录验证过滤器(废弃  com.lph.interceptor替代)
- * @author FH QQ 313596790[青苔]
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/**
+ * 登录验证过滤器(废弃  com.lph.interceptor替代)
  *
+ * @author lvpenghui
+ * @since 2019-4-11 20:43:41
  */
 public class LoginFilter extends BaseController implements Filter {
 
-	/**
-	 * 初始化
-	 */
-	public void init(FilterConfig fc) throws ServletException {
-		//FileUtil.createDir("d:/FH/topic/");
-	}
-	
-	public void destroy() {
+    /**
+     * 初始化
+     */
+    @Override
+    public void init(FilterConfig fc) throws ServletException {
+        //FileUtil.createDir("d:/FH/topic/");
+    }
 
-	}
+    @Override
+    public void destroy() {
 
-	public void doFilter(ServletRequest req, ServletResponse res,
-			FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest request = (HttpServletRequest) req;
-		HttpServletResponse response = (HttpServletResponse) res;
-		chain.doFilter(req, res); // 调用下一过滤器
-	}
+    }
+
+    @Override
+    public void doFilter(ServletRequest req, ServletResponse res,
+                         FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+        // 调用下一过滤器
+        chain.doFilter(req, res);
+    }
 
 }

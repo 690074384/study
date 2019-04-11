@@ -1,17 +1,12 @@
 package com.lph.controller.information.pictures;
 
-import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.lph.controller.base.BaseController;
+import com.lph.entity.Page;
+import com.lph.service.information.pictures.PicturesManager;
+import com.lph.util.*;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
@@ -22,297 +17,332 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.lph.controller.base.BaseController;
-import com.lph.entity.Page;
-import com.lph.util.AppUtil;
-import com.lph.util.DateUtil;
-import com.lph.util.DelAllFile;
-import com.lph.util.FileUpload;
-import com.lph.util.GetWeb;
-import com.lph.util.Jurisdiction;
-import com.lph.util.Const;
-import com.lph.util.PageData;
-import com.lph.util.PathUtil;
-import com.lph.util.Tools;
-import com.lph.util.Watermark;
-import com.lph.service.information.pictures.PicturesManager;
+import javax.annotation.Resource;
+import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-/** 
+/**
  * 类名称：图片管理
- * 创建人：FH Q313596790
- * 创建时间：2015-03-21
+ *
+ * @author lvpenghui
+ * @since 2019-4-9 17:17:42
  */
 @Controller
-@RequestMapping(value="/pictures")
+@RequestMapping(value = "/pictures")
 public class PicturesController extends BaseController {
-	
-	String menuUrl = "pictures/list.do"; //菜单地址(权限用)
-	@Resource(name="picturesService")
-	private PicturesManager picturesService;
-	
-	/**列表
-	 * @param page
-	 * @return
-	 * @throws Exception 
-	 */
-	@RequestMapping(value="/list")
-	public ModelAndView list(Page page) throws Exception{
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		String KEYW = pd.getString("keyword");	//检索条件
-		if(null != KEYW && !"".equals(KEYW)){
-			pd.put("KEYW", KEYW.trim());
-		}
-		page.setPd(pd);
-		List<PageData>	varList = picturesService.list(page);	//列出Pictures列表
-		mv.setViewName("information/pictures/pictures_list");
-		mv.addObject("varList", varList);
-		mv.addObject("pd", pd);
-		mv.addObject("QX",Jurisdiction.getHC());	//按钮权限
-		return mv;
-	}
-	
-	/**新增
-	 * @param file
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/save")
-	@ResponseBody
-	public Object save(
-			@RequestParam(required=false) MultipartFile file
-			) throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "add")){return null;} //校验权限
-		logBefore(logger, Jurisdiction.getUsername()+"新增图片");
-		Map<String,String> map = new HashMap<String,String>();
-		String  ffile = DateUtil.getDays(), fileName = "";
-		PageData pd = new PageData();
-		if(Jurisdiction.buttonJurisdiction(menuUrl, "add")){
-			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;		//文件上传路径
-				fileName = FileUpload.fileUp(file, filePath, this.get32UUID());				//执行上传
-			}else{
-				System.out.println("上传失败");
-			}
-			pd.put("PICTURES_ID", this.get32UUID());			//主键
-			pd.put("TITLE", "图片");								//标题
-			pd.put("NAME", fileName);							//文件名
-			pd.put("PATH", ffile + "/" + fileName);				//路径
-			pd.put("CREATETIME", Tools.date2Str(new Date()));	//创建时间
-			pd.put("MASTER_ID", "1");							//附属与
-			pd.put("BZ", "图片管理处上传");						//备注
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);//加水印
-			picturesService.save(pd);
-		}
-		map.put("result", "ok");
-		return AppUtil.returnObject(pd, map);
-	}
-	
-	/**删除
-	 * @param out
-	 * @throws Exception 
-	 */
-	@RequestMapping(value="/delete")
-	public void delete(PrintWriter out) throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "del")){return;} //校验权限
-		logBefore(logger, Jurisdiction.getUsername()+"删除图片");
-		PageData pd = new PageData();
-		if(Jurisdiction.buttonJurisdiction(menuUrl, "del")){
-			pd = this.getPageData();
-			DelAllFile.delFolder(PathUtil.getClasspath()+ Const.FILEPATHIMG + pd.getString("PATH")); //删除图片
-			picturesService.delete(pd);
-		}
-		out.write("success");
-		out.close();
-	}
-	
-	/**修改
-	 * @param request
-	 * @param file
-	 * @param tpz
-	 * @param PICTURES_ID
-	 * @param TITLE
-	 * @param MASTER_ID
-	 * @param BZ
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/edit")
-	public ModelAndView edit(
-			HttpServletRequest request,
-			@RequestParam(value="tp",required=false) MultipartFile file,
-			@RequestParam(value="tpz",required=false) String tpz,
-			@RequestParam(value="PICTURES_ID",required=false) String PICTURES_ID,
-			@RequestParam(value="TITLE",required=false) String TITLE,
-			@RequestParam(value="MASTER_ID",required=false) String MASTER_ID,
-			@RequestParam(value="BZ",required=false) String BZ
-			) throws Exception{
-		if(!Jurisdiction.buttonJurisdiction(menuUrl, "edit")){return null;} //校验权限
-		logBefore(logger, Jurisdiction.getUsername()+"修改图片");
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		if(Jurisdiction.buttonJurisdiction(menuUrl, "edit")){
-			pd.put("PICTURES_ID", PICTURES_ID);		//图片ID
-			pd.put("TITLE", TITLE);					//标题
-			pd.put("MASTER_ID", MASTER_ID);			//属于ID
-			pd.put("BZ", BZ);						//备注
-			if(null == tpz){tpz = "";}
-			String  ffile = DateUtil.getDays(), fileName = "";
-			if (null != file && !file.isEmpty()) {
-				String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;	//文件上传路径
-				fileName = FileUpload.fileUp(file, filePath, this.get32UUID());			//执行上传
-				pd.put("PATH", ffile + "/" + fileName);									//路径
-				pd.put("NAME", fileName);
-			}else{
-				pd.put("PATH", tpz);
-			}
-			Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);//加水印
-			picturesService.edit(pd);				//执行修改数据库
-		}
-		mv.addObject("msg","success");
-		mv.setViewName("save_result");
-		return mv;
-	}
-	
-	/**去新增页面
-	 * @return
-	 */
-	@RequestMapping(value="/goAdd")
-	public ModelAndView goAdd() throws Exception{
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		mv.setViewName("information/pictures/pictures_add");
-		mv.addObject("pd", pd);
-		return mv;
-	}
-	
-	/**去修改页面
-	 * @return
-	 * @throws Exception 
-	 */
-	@RequestMapping(value="/goEdit")
-	public ModelAndView goEdit() throws Exception{
-		ModelAndView mv = this.getModelAndView();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		pd = picturesService.findById(pd);	//根据ID读取
-		mv.setViewName("information/pictures/pictures_edit");
-		mv.addObject("msg", "edit");
-		mv.addObject("pd", pd);
-		return mv;
-	}	
-	
-	/**批量删除
-	 * @return
-	 * @throws Exception 
-	 */
-	@RequestMapping(value="/deleteAll")
-	@ResponseBody
-	public Object deleteAll() throws Exception {
-		PageData pd = new PageData();		
-		Map<String,Object> map = new HashMap<String,Object>();
-		pd = this.getPageData();
-		if(Jurisdiction.buttonJurisdiction(menuUrl, "del")){
-			List<PageData> pdList = new ArrayList<PageData>();
-			List<PageData> pathList = new ArrayList<PageData>();
-			String DATA_IDS = pd.getString("DATA_IDS");
-			if(null != DATA_IDS && !"".equals(DATA_IDS)){
-				String ArrayDATA_IDS[] = DATA_IDS.split(",");
-				pathList = picturesService.getAllById(ArrayDATA_IDS);
-				for(int i=0;i<pathList.size();i++){
-					DelAllFile.delFolder(PathUtil.getClasspath()+ Const.FILEPATHIMG + pathList.get(i).getString("PATH"));//删除图片
-				}
-				picturesService.deleteAll(ArrayDATA_IDS);
-				pd.put("msg", "ok");
-			}else{
-				pd.put("msg", "no");
-			}
-			pdList.add(pd);
-			map.put("list", pdList);
-			}
-		return AppUtil.returnObject(pd, map);
-	}
-	
-	/**删除图片
-	 * @param out
-	 * @throws Exception 
-	 */
-	@RequestMapping(value="/deltp")
-	public void deltp(PrintWriter out) throws Exception {
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		String PATH = pd.getString("PATH");													 		//图片路径
-		DelAllFile.delFolder(PathUtil.getClasspath()+ Const.FILEPATHIMG + pd.getString("PATH")); 	//删除图片
-		if(PATH != null){
-			picturesService.delTp(pd);																//删除数据库中图片数据
-		}	
-		out.write("success");
-		out.close();
-	}
-	
-	/**去图片爬虫页面
-	 * @return
-	 * @throws Exception 
-	 */
-	@RequestMapping(value="/goImageCrawler")
-	public ModelAndView goImageCrawler() throws Exception{
-		ModelAndView mv = this.getModelAndView();
-		mv.setViewName("information/pictures/imageCrawler");
-		return mv;
-	}
-	
-	/**
-	 *	请求连接获取网页中每个图片的地址
-	 * @param args
-	 * @throws Exception
-	 */
-	@RequestMapping(value="/getImagePath")
-	@ResponseBody
-	public Object getImagePath(){
-		Map<String,Object> map = new HashMap<String,Object>();
-		PageData pd = new PageData();
-		pd = this.getPageData();
-		List<String> imgList = new ArrayList<String>();
-		String errInfo = "success";
-		String serverUrl = pd.getString("serverUrl");	//网页地址
-		String msg = pd.getString("msg");				//msg:save 时保存到服务器
-		if (!serverUrl.startsWith("http://")){ 			//检验地址是否http://
-			 errInfo = "error";							//无效地址
-		 }else{
-			 try {
-				imgList = GetWeb.getImagePathList(serverUrl);
-				if("save".equals(msg)){
-					String ffile = DateUtil.getDays();
-					String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;		//文件上传路径
-					for(int i=0;i<imgList.size();i++){	//把网络图片保存到服务器硬盘，并数据库记录
-						String fileName = FileUpload.getHtmlPicture(imgList.get(i),filePath,null);								//下载网络图片上传到服务器上
-						//保存到数据库
-						pd.put("PICTURES_ID", this.get32UUID());			//主键
-						pd.put("TITLE", "图片");								//标题
-						pd.put("NAME", fileName);							//文件名
-						pd.put("PATH", ffile + "/" + fileName);				//路径
-						pd.put("CREATETIME", Tools.date2Str(new Date()));	//创建时间
-						pd.put("MASTER_ID", "1");							//附属与
-						pd.put("BZ", serverUrl+"爬取");						//备注
-						Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);//加水印
-						picturesService.save(pd);
-					}
-				}
-			} catch (Exception e) {
-				errInfo = "error";						//出错
-			}
-		}
-		map.put("imgList", imgList);					//图片集合
-		map.put("result", errInfo);						//返回结果
-		return AppUtil.returnObject(new PageData(), map);
-	}
-	
-	@InitBinder
-	public void initBinder(WebDataBinder binder){
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(format,true));
-	}
+
+    /**
+     * 菜单地址(权限用)
+     */
+    private String menuUrl = "pictures/list.do";
+    @Resource(name = "picturesService")
+    private PicturesManager picturesService;
+
+    /**
+     * 列表
+     *
+     * @param page 分页
+     * @return ModelAndView 对象
+     * @throws Exception 可能抛出的异常
+     */
+    @RequestMapping(value = "/list")
+    public ModelAndView list(Page page) throws Exception {
+        ModelAndView mv = this.getModelAndView();
+        PageData pd = this.getPageData();
+        //检索条件
+        String keword = pd.getString("keyword");
+        if (StringUtils.isNotBlank(keword)) {
+            pd.put("KEYW", keword.trim());
+        }
+        page.setPd(pd);
+        //列出Pictures列表
+        List<PageData> varList = picturesService.list(page);
+        mv.setViewName("information/pictures/pictures_list");
+        mv.addObject("varList", varList);
+        mv.addObject("pd", pd);
+        //按钮权限
+        mv.addObject("QX", Jurisdiction.getHC());
+        return mv;
+    }
+
+    /**
+     * 新增
+     *
+     * @param file 图片接收器
+     * @return 保存结果
+     * @throws Exception 可能抛出的异常
+     */
+    @RequestMapping(value = "/save")
+    @ResponseBody
+    public Object save(
+            @RequestParam(required = false) MultipartFile file
+    ) throws Exception {
+        if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.ADDD)) {
+            return null;
+        } //校验权限
+        logBefore(logger, Jurisdiction.getUsername() + "新增图片");
+        Map<String, String> map = Maps.newHashMap();
+        String ffile = DateUtil.getDays(), fileName = "";
+        PageData pd = new PageData();
+        if (Jurisdiction.buttonJurisdiction(menuUrl, Constants.ADDD)) {
+            if (null != file && !file.isEmpty()) {
+                //文件上传路径
+                String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;
+                //执行上传
+                fileName = FileUpload.fileUp(file, filePath, this.get32UUID());
+            } else {
+                System.out.println("上传失败");
+            }
+            pd.put("PICTURES_ID", this.get32UUID());
+            pd.put("TITLE", "图片");
+            pd.put("NAME", fileName);
+            pd.put("PATH", ffile + "/" + fileName);
+            pd.put("CREATETIME", Tools.date2Str(new Date()));
+            //附属与
+            pd.put("MASTER_ID", "1");
+            //备注
+            pd.put("BZ", "图片管理处上传");
+            //加水印
+            Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);
+            picturesService.save(pd);
+        }
+        map.put("result", "ok");
+        return AppUtil.returnObject(pd, map);
+    }
+
+    /**
+     * 删除
+     *
+     * @param out out
+     * @throws Exception 可能抛出的异常
+     */
+    @RequestMapping(value = "/delete")
+    public void delete(PrintWriter out) throws Exception {
+        if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.DELE)) {
+            return;
+        } //校验权限
+        logBefore(logger, Jurisdiction.getUsername() + "删除图片");
+        PageData pd;
+        if (Jurisdiction.buttonJurisdiction(menuUrl, Constants.DELE)) {
+            pd = this.getPageData();
+            //删除图片
+            DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH"));
+            picturesService.delete(pd);
+        }
+        out.write("success");
+        out.close();
+    }
+
+    /**
+     * 修改
+     *
+     * @param file       文件
+     * @param path       文件路径
+     * @param picturesId 图片ID
+     * @param title      标题
+     * @param masterId   属于ID
+     * @param remark     备注
+     * @return ModelAndView对象
+     * @throws Exception 可能抛出的异常
+     */
+    @RequestMapping(value = "/edit")
+    public ModelAndView edit(
+            @RequestParam(value = "tp", required = false) MultipartFile file,
+            @RequestParam(value = "tpz", required = false) String path,
+            @RequestParam(value = "PICTURES_ID", required = false) String picturesId,
+            @RequestParam(value = "TITLE", required = false) String title,
+            @RequestParam(value = "MASTER_ID", required = false) String masterId,
+            @RequestParam(value = "BZ", required = false) String remark
+    ) throws Exception {
+        if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.EDIT)) {
+            return null;
+        } //校验权限
+        logBefore(logger, Jurisdiction.getUsername() + "修改图片");
+        ModelAndView mv = this.getModelAndView();
+        PageData pd = this.getPageData();
+        if (Jurisdiction.buttonJurisdiction(menuUrl, Constants.EDIT)) {
+            pd.put("PICTURES_ID", picturesId);
+            pd.put("TITLE", title);
+            pd.put("MASTER_ID", masterId);
+            pd.put("BZ", remark);
+            if (null == path) {
+                path = "";
+            }
+            String ffile = DateUtil.getDays(), fileName = "";
+            if (null != file && !file.isEmpty()) {
+                //文件上传路径
+                String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;
+                //执行上传
+                fileName = FileUpload.fileUp(file, filePath, this.get32UUID());
+                //路径
+                pd.put("PATH", ffile + "/" + fileName);
+                pd.put("NAME", fileName);
+            } else {
+                pd.put("PATH", path);
+            }
+            //加水印
+            Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);
+            //执行修改数据库
+            picturesService.edit(pd);
+        }
+        mv.addObject("msg", "success");
+        mv.setViewName("save_result");
+        return mv;
+    }
+
+    /**
+     * 去新增页面
+     */
+    @RequestMapping(value = "/goAdd")
+    public ModelAndView goAdd() {
+        ModelAndView mv = this.getModelAndView();
+        PageData pd = this.getPageData();
+        mv.setViewName("information/pictures/pictures_add");
+        mv.addObject("pd", pd);
+        return mv;
+    }
+
+    /**
+     * 去修改页面
+     *
+     * @return ModelAndView对象
+     * @throws Exception 可能抛出的异常
+     */
+    @RequestMapping(value = "/goEdit")
+    public ModelAndView goEdit() throws Exception {
+        ModelAndView mv = this.getModelAndView();
+        PageData pd = this.getPageData();
+        //根据ID读取
+        pd = picturesService.findById(pd);
+        mv.setViewName("information/pictures/pictures_edit");
+        mv.addObject("msg", "edit");
+        mv.addObject("pd", pd);
+        return mv;
+    }
+
+    /**
+     * 批量删除
+     *
+     * @return 批量删除结果
+     * @throws Exception 可能抛出的异常
+     */
+    @RequestMapping(value = "/deleteAll")
+    @ResponseBody
+    public Object deleteAll() throws Exception {
+        PageData pd = this.getPageData();
+        Map<String, Object> map = Maps.newHashMap();
+        if (Jurisdiction.buttonJurisdiction(menuUrl, Constants.DELE)) {
+            List<PageData> pdList = Lists.newArrayList();
+            List<PageData> pathList;
+            String dataIds = pd.getString("DATA_IDS");
+            if (StringUtils.isNotBlank(dataIds)) {
+                String[] allDatas = dataIds.split(Constants.COMMA);
+                pathList = picturesService.getAllById(allDatas);
+                for (PageData aPathList : pathList) {
+                    //删除图片
+                    DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + aPathList.getString("PATH"));
+                }
+                picturesService.deleteAll(allDatas);
+                pd.put("msg", "ok");
+            } else {
+                pd.put("msg", "no");
+            }
+            pdList.add(pd);
+            map.put("list", pdList);
+        }
+        return AppUtil.returnObject(pd, map);
+    }
+
+    /**
+     * 删除图片
+     *
+     * @param out out
+     * @throws Exception 可能抛出的异常
+     */
+    @RequestMapping(value = "/deltp")
+    public void deltp(PrintWriter out) throws Exception {
+        PageData pd = this.getPageData();
+        //图片路径
+        String path = pd.getString("PATH");
+        //删除图片
+        DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH"));
+        if (null != path) {
+            //删除数据库中图片数据
+            picturesService.delTp(pd);
+        }
+        out.write("success");
+        out.close();
+    }
+
+    /**
+     * 去图片爬虫页面
+     *
+     * @return ModelAndView对象
+     */
+    @RequestMapping(value = "/goImageCrawler")
+    public ModelAndView goImageCrawler() {
+        ModelAndView mv = this.getModelAndView();
+        mv.setViewName("information/pictures/imageCrawler");
+        return mv;
+    }
+
+    /**
+     * 请求连接获取网页中每个图片的地址
+     */
+    @RequestMapping(value = "/getImagePath")
+    @ResponseBody
+    public Object getImagePath() {
+        Map<String, Object> map = Maps.newHashMap();
+        PageData pd = this.getPageData();
+        List<String> imgList = Lists.newArrayList();
+        String errInfo = "success";
+        //网页地址
+        String serverUrl = pd.getString("serverUrl");
+        //msg:save 时保存到服务器
+        String msg = pd.getString("msg");
+        //检验地址是否http://
+        if (!serverUrl.startsWith(Constants.HTTP)) {
+            //无效地址
+            errInfo = "error";
+        } else {
+            try {
+                imgList = GetWeb.getImagePathList(serverUrl);
+                if (Constants.SAVE.equals(msg)) {
+                    String ffile = DateUtil.getDays();
+                    //文件上传路径
+                    String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;
+                    //把网络图片保存到服务器硬盘，并数据库记录
+                    for (String anImgList : imgList) {
+                        //下载网络图片上传到服务器上
+                        String fileName = FileUpload.getHtmlPicture(anImgList, filePath, null);
+                        //保存到数据库
+                        pd.put("PICTURES_ID", this.get32UUID());
+                        pd.put("TITLE", "图片");
+                        pd.put("NAME", fileName);
+                        pd.put("PATH", ffile + "/" + fileName);
+                        pd.put("CREATETIME", Tools.date2Str(new Date()));
+                        pd.put("MASTER_ID", "1");
+                        pd.put("BZ", serverUrl + "爬取");
+                        Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);
+                        picturesService.save(pd);
+                    }
+                }
+            } catch (Exception e) {
+                errInfo = "error";
+            }
+        }
+        map.put("imgList", imgList);
+        map.put("result", errInfo);
+        return AppUtil.returnObject(new PageData(), map);
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
+    }
 }

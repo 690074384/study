@@ -1,10 +1,10 @@
-package com.lph.controller.information.attachedmx;
+package com.lph.controller.system.fhlog;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.lph.controller.base.BaseController;
 import com.lph.entity.Page;
-import com.lph.service.information.attachedmx.AttachedMxManager;
+import com.lph.service.system.fhlog.FHlogManager;
 import com.lph.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -24,38 +24,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 说明：明细表
+ * 说明：操作日志记录
  *
  * @author lvpenghui
- * @since 2019-4-9 16:52:50
+ * @since 2019-4-10 11:09:26
  */
 @Controller
-@RequestMapping(value = "/attachedmx")
-public class AttachedMxController extends BaseController {
+@RequestMapping(value = "/fhlog")
+public class LogHistoryController extends BaseController {
 
-    private String menuUrl = "attachedmx/list.do";
-    @Resource(name = "attachedmxService")
-    private AttachedMxManager attachedmxService;
-
-    /**
-     * 保存
-     *
-     * @throws Exception 可能抛出的异常
-     */
-    @RequestMapping(value = "/save")
-    public ModelAndView save() throws Exception {
-        logBefore(logger, Jurisdiction.getUsername() + "新增AttachedMx");
-        if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.ADDD)) {
-            return null;
-        } //校验权限
-        ModelAndView mv = this.getModelAndView();
-        PageData pd = this.getPageData();
-        pd.put("ATTACHEDMX_ID", this.get32UUID());
-        attachedmxService.save(pd);
-        mv.addObject("msg", "success");
-        mv.setViewName("save_result");
-        return mv;
-    }
+    private String menuUrl = "fhlog/list.do";
+    @Resource(name = "fhlogService")
+    private FHlogManager fhlogService;
 
     /**
      * 删除
@@ -65,33 +45,15 @@ public class AttachedMxController extends BaseController {
      */
     @RequestMapping(value = "/delete")
     public void delete(PrintWriter out) throws Exception {
-        logBefore(logger, Jurisdiction.getUsername() + "删除AttachedMx");
+        logBefore(logger, Jurisdiction.getUsername() + "删除FHlog");
         if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.DELE)) {
             return;
-        } //校验权限
+        }
+        //校验权限
         PageData pd = this.getPageData();
-        attachedmxService.delete(pd);
+        fhlogService.delete(pd);
         out.write("success");
         out.close();
-    }
-
-    /**
-     * 修改
-     *
-     * @throws Exception 可能抛出的异常
-     */
-    @RequestMapping(value = "/edit")
-    public ModelAndView edit() throws Exception {
-        logBefore(logger, Jurisdiction.getUsername() + "修改AttachedMx");
-        if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.EDIT)) {
-            return null;
-        } //校验权限
-        ModelAndView mv = this.getModelAndView();
-        PageData pd = this.getPageData();
-        attachedmxService.edit(pd);
-        mv.addObject("msg", "success");
-        mv.setViewName("save_result");
-        return mv;
     }
 
     /**
@@ -102,7 +64,7 @@ public class AttachedMxController extends BaseController {
      */
     @RequestMapping(value = "/list")
     public ModelAndView list(Page page) throws Exception {
-        logBefore(logger, Jurisdiction.getUsername() + "列表AttachedMx");
+        logBefore(logger, Jurisdiction.getUsername() + "列表FHlog");
         //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
         //if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
         ModelAndView mv = this.getModelAndView();
@@ -112,44 +74,21 @@ public class AttachedMxController extends BaseController {
         if (null != keywords && !"".equals(keywords)) {
             pd.put("keywords", keywords.trim());
         }
+        String lastStart = pd.getString("lastStart");
+        String lastEnd = pd.getString("lastEnd");
+        if (lastStart != null && !"".equals(lastStart)) {
+            pd.put("lastStart", lastStart + " 00:00:00");
+        }
+        if (lastEnd != null && !"".equals(lastEnd)) {
+            pd.put("lastEnd", lastEnd + " 00:00:00");
+        }
         page.setPd(pd);
-        //列出AttachedMx列表
-        List<PageData> varList = attachedmxService.list(page);
-        mv.setViewName("information/attachedmx/attachedmx_list");
+        List<PageData> varList = fhlogService.list(page);
+        mv.setViewName("system/fhlog/fhlog_list");
         mv.addObject("varList", varList);
         mv.addObject("pd", pd);
         //按钮权限
         mv.addObject("QX", Jurisdiction.getHC());
-        return mv;
-    }
-
-    /**
-     * 去新增页面
-     */
-    @RequestMapping(value = "/goAdd")
-    public ModelAndView goAdd() {
-        ModelAndView mv = this.getModelAndView();
-        PageData pd = this.getPageData();
-        mv.setViewName("information/attachedmx/attachedmx_edit");
-        mv.addObject("msg", "save");
-        mv.addObject("pd", pd);
-        return mv;
-    }
-
-    /**
-     * 去修改页面
-     *
-     * @throws Exception 可能抛出的异常
-     */
-    @RequestMapping(value = "/goEdit")
-    public ModelAndView goEdit() throws Exception {
-        ModelAndView mv = this.getModelAndView();
-        PageData pd = this.getPageData();
-        //根据ID读取
-        pd = attachedmxService.findById(pd);
-        mv.setViewName("information/attachedmx/attachedmx_edit");
-        mv.addObject("msg", "edit");
-        mv.addObject("pd", pd);
         return mv;
     }
 
@@ -161,19 +100,17 @@ public class AttachedMxController extends BaseController {
     @RequestMapping(value = "/deleteAll")
     @ResponseBody
     public Object deleteAll() throws Exception {
-        logBefore(logger, Jurisdiction.getUsername() + "批量删除AttachedMx");
+        logBefore(logger, Jurisdiction.getUsername() + "批量删除FHlog");
         if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.DELE)) {
             return null;
-        }
-        //校验权限
+        } //校验权限
         PageData pd = this.getPageData();
         Map<String, Object> map = Maps.newHashMap();
         List<PageData> pdList = Lists.newArrayList();
         String dataIds = pd.getString("DATA_IDS");
-        if (StringUtils.isNotBlank(dataIds)) {
-            String[] allDatas = dataIds.split(Constants.COMMA);
-            logger.info("attachedmxService批量删除操作！");
-            attachedmxService.deleteAll(allDatas);
+        if (StringUtils.isNotEmpty(dataIds)) {
+            String[] allDatas = dataIds.split(",");
+            fhlogService.deleteAll(allDatas);
             pd.put("msg", "ok");
         } else {
             pd.put("msg", "no");
@@ -190,30 +127,29 @@ public class AttachedMxController extends BaseController {
      */
     @RequestMapping(value = "/excel")
     public ModelAndView exportExcel() throws Exception {
-        logBefore(logger, Jurisdiction.getUsername() + "导出AttachedMx到excel");
+        logBefore(logger, Jurisdiction.getUsername() + "导出FHlog到excel");
         if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.SRCH)) {
             return null;
         }
         PageData pd = this.getPageData();
         Map<String, Object> dataMap = Maps.newHashMap();
         List<String> titles = Lists.newArrayList();
-        titles.add("名称");
-        titles.add("标题");
-        titles.add("创建日期");
-        titles.add("单价");
+        titles.add("用户名");
+        titles.add("操作时间");
+        titles.add("事件");
         dataMap.put("titles", titles);
-        List<PageData> varOList = attachedmxService.listAll(pd);
+        List<PageData> varOList = fhlogService.listAll(pd);
         List<PageData> varList = Lists.newArrayList();
         for (PageData aVarOList : varOList) {
             PageData vpd = new PageData();
-            vpd.put("var1", aVarOList.getString("NAME"));
-            vpd.put("var2", aVarOList.getString("TITLE"));
-            vpd.put("var3", aVarOList.getString("CTIME"));
-            vpd.put("var4", aVarOList.get("PRICE").toString());
+            vpd.put("var1", aVarOList.getString("USERNAME"));
+            vpd.put("var2", aVarOList.getString("CZTIME"));
+            vpd.put("var3", aVarOList.getString("CONTENT"));
             varList.add(vpd);
         }
         dataMap.put("varList", varList);
-        return new ModelAndView(new ObjectExcelView(), dataMap);
+        ObjectExcelView erv = new ObjectExcelView();
+        return new ModelAndView(erv, dataMap);
     }
 
     @InitBinder

@@ -1,5 +1,7 @@
 package com.lph.controller.fhoa.fhfile;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.lph.controller.base.BaseController;
 import com.lph.entity.Page;
 import com.lph.service.fhoa.fhfile.FhfileManager;
@@ -36,23 +38,25 @@ public class FhfileController extends BaseController {
     /**
      * 保存
      *
-     * @param
-     * @throws Exception
+     * @throws Exception 可能抛出的异常
      */
     @RequestMapping(value = "/save")
     public ModelAndView save() throws Exception {
         logBefore(logger, Jurisdiction.getUsername() + "新增Fhfile");
-        if (!Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+        if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.ADDD)) {
             return null;
         } //校验权限
         ModelAndView mv = this.getModelAndView();
-        PageData pd = new PageData();
-        pd = this.getPageData();
-        pd.put("FHFILE_ID", this.get32UUID());                        //主键
-        pd.put("CTIME", Tools.date2Str(new Date()));                //上传时间
-        pd.put("USERNAME", Jurisdiction.getUsername());                //上传者
-        pd.put("DEPARTMENT_ID", Jurisdiction.getDEPARTMENT_ID());    //部门ID
-        pd.put("FILESIZE", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH")));    //文件大小
+        PageData pd = this.getPageData();
+        pd.put("FHFILE_ID", this.get32UUID());
+        //上传时间
+        pd.put("CTIME", Tools.date2Str(new Date()));
+        //上传者
+        pd.put("USERNAME", Jurisdiction.getUsername());
+        //部门ID
+        pd.put("DEPARTMENT_ID", Jurisdiction.getDEPARTMENT_ID());
+        //文件大小
+        pd.put("FILESIZE", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH")));
         fhfileService.save(pd);
         mv.addObject("msg", "success");
         mv.setViewName("save_result");
@@ -62,20 +66,21 @@ public class FhfileController extends BaseController {
     /**
      * 删除
      *
-     * @param out
-     * @throws Exception
+     * @param out out
+     * @throws Exception 可能抛出的异常
      */
     @RequestMapping(value = "/delete")
     public void delete(PrintWriter out) throws Exception {
         logBefore(logger, Jurisdiction.getUsername() + "删除Fhfile");
-        if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+        if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.DELE)) {
             return;
-        } //校验权限
-        PageData pd = new PageData();
-        pd = this.getPageData();
+        }
+        //校验权限
+        PageData pd = this.getPageData();
         pd = fhfileService.findById(pd);
         fhfileService.delete(pd);
-        DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH")); //删除文件
+        //删除文件
+        DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH"));
         out.write("success");
         out.close();
     }
@@ -83,46 +88,46 @@ public class FhfileController extends BaseController {
     /**
      * 列表
      *
-     * @param page
-     * @throws Exception
+     * @param page 分页
+     * @throws Exception 可能抛出的异常
      */
     @RequestMapping(value = "/list")
     public ModelAndView list(Page page) throws Exception {
         logBefore(logger, Jurisdiction.getUsername() + "列表Fhfile");
-        //if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;} //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+        //校验权限(无权查看时页面会有提示,如果不注释掉这句代码就无法进入列表页面,所以根据情况是否加入本句代码)
+        //if(!Jurisdiction.buttonJurisdiction(menuUrl, "cha")){return null;}
         ModelAndView mv = this.getModelAndView();
-        PageData pd = new PageData();
-        pd = this.getPageData();
-        String keywords = pd.getString("keywords");                //关键词检索条件
+        PageData pd = this.getPageData();
+        //关键词检索条件
+        String keywords = pd.getString("keywords");
         if (null != keywords && !"".equals(keywords)) {
             pd.put("keywords", keywords.trim());
         }
         String item = Jurisdiction.getDEPARTMENT_IDS();
-        if ("0".equals(item) || "无权".equals(item)) {
-            pd.put("item", "");        //根据部门ID过滤
+        if (Constants.ZERO_STRING.equals(item) || Constants.WU_QUAN.equals(item)) {
+            //根据部门ID过滤
+            pd.put("item", "");
         } else {
             pd.put("item", item.replaceFirst("\\(", "\\('" + Jurisdiction.getDEPARTMENT_ID() + "',"));
         }
         page.setPd(pd);
-        List<PageData> varList = fhfileService.list(page);        //列出Fhfile列表
+        //列出Fhfile列表
+        List<PageData> varList = fhfileService.list(page);
         mv.setViewName("fhoa/fhfile/fhfile_list");
         mv.addObject("varList", varList);
         mv.addObject("pd", pd);
-        mv.addObject("QX", Jurisdiction.getHC());                //按钮权限
+        //按钮权限
+        mv.addObject("QX", Jurisdiction.getHC());
         return mv;
     }
 
     /**
      * 去新增页面
-     *
-     * @param
-     * @throws Exception
      */
     @RequestMapping(value = "/goAdd")
-    public ModelAndView goAdd() throws Exception {
+    public ModelAndView goAdd() {
         ModelAndView mv = this.getModelAndView();
-        PageData pd = new PageData();
-        pd = this.getPageData();
+        PageData pd = this.getPageData();
         mv.setViewName("fhoa/fhfile/fhfile_edit");
         mv.addObject("msg", "save");
         mv.addObject("pd", pd);
@@ -132,30 +137,30 @@ public class FhfileController extends BaseController {
     /**
      * 批量删除
      *
-     * @param
-     * @throws Exception
+     * @throws Exception 可能抛出的异常
      */
     @RequestMapping(value = "/deleteAll")
     @ResponseBody
     public Object deleteAll() throws Exception {
         logBefore(logger, Jurisdiction.getUsername() + "批量删除Fhfile");
-        if (!Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+        if (!Jurisdiction.buttonJurisdiction(menuUrl, Constants.DELE)) {
             return null;
         } //校验权限
-        PageData pd = new PageData();
-        Map<String, Object> map = new HashMap<String, Object>();
-        pd = this.getPageData();
-        List<PageData> pdList = new ArrayList<PageData>();
-        String DATA_IDS = pd.getString("DATA_IDS");
-        if (null != DATA_IDS && !"".equals(DATA_IDS)) {
-            String ArrayDATA_IDS[] = DATA_IDS.split(",");
+        PageData pd = this.getPageData();
+        Map<String, Object> map = Maps.newHashMap();
+        List<PageData> pdList = Lists.newArrayList();
+        String dataIds = pd.getString("DATA_IDS");
+        if (null != dataIds && !"".equals(dataIds)) {
+            String[] allDatas = dataIds.split(Constants.COMMA);
             PageData fpd = new PageData();
-            for (int i = 0; i < ArrayDATA_IDS.length; i++) {
-                fpd.put("FHFILE_ID", ArrayDATA_IDS[i]);
+            for (String allData : allDatas) {
+                fpd.put("FHFILE_ID", allData);
                 fpd = fhfileService.findById(fpd);
-                DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + fpd.getString("FILEPATH")); //删除物理文件
+                //删除物理文件
+                DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + fpd.getString("FILEPATH"));
             }
-            fhfileService.deleteAll(ArrayDATA_IDS);        //删除数据库记录
+            //删除数据库记录
+            fhfileService.deleteAll(allDatas);
             pd.put("msg", "ok");
         } else {
             pd.put("msg", "no");
@@ -168,16 +173,15 @@ public class FhfileController extends BaseController {
     /**
      * 下载
      *
-     * @param response
-     * @throws Exception
+     * @param response 响应数据
+     * @throws Exception 可能抛出的异常
      */
     @RequestMapping(value = "/download")
     public void downExcel(HttpServletResponse response) throws Exception {
-        PageData pd = new PageData();
-        pd = this.getPageData();
+        PageData pd = this.getPageData();
         pd = fhfileService.findById(pd);
         String fileName = pd.getString("FILEPATH");
-        FileDownload.fileDownload(response, PathUtil.getClasspath() + Const.FILEPATHFILEOA + fileName, pd.getString("NAME") + fileName.substring(19, fileName.length()));
+        FileDownload.fileDownload(response, PathUtil.getClasspath() + Const.FILEPATHFILEOA + fileName, pd.getString("NAME") + fileName.substring(19));
     }
 
     @InitBinder
