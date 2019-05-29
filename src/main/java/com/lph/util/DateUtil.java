@@ -6,14 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/** 
+/**
  * 说明：日期处理
- * 创建人：FH Q313596790
- * 修改时间：2015年11月24日
- * @version
+ * @author lvpenghui
+ *
  */
 public class DateUtil {
-	
+
 	private final static SimpleDateFormat sdfYear = new SimpleDateFormat("yyyy");
 	private final static SimpleDateFormat sdfDay = new SimpleDateFormat("yyyy-MM-dd");
 	private final static SimpleDateFormat sdfDays = new SimpleDateFormat("yyyyMMdd");
@@ -27,7 +26,7 @@ public class DateUtil {
 	public static String getSdfTimes() {
 		return sdfTimes.format(new Date());
 	}
-	
+
 	/**
 	 * 获取YYYY格式
 	 * @return
@@ -43,7 +42,7 @@ public class DateUtil {
 	public static String getDay() {
 		return sdfDay.format(new Date());
 	}
-	
+
 	/**
 	 * 获取YYYYMMDD格式
 	 * @return
@@ -65,7 +64,7 @@ public class DateUtil {
 	* @Description: TODO(日期比较，如果s>=e 返回true 否则返回false)
 	* @param s
 	* @param e
-	* @return boolean  
+	* @return boolean
 	* @throws
 	* @author lph
 	 */
@@ -104,7 +103,7 @@ public class DateUtil {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * @param startTime
 	 * @param endTime
@@ -121,13 +120,13 @@ public class DateUtil {
 			return 0;
 		}
 	}
-	 
+
 	/**
      * <li>功能描述：时间相减得到天数
      * @param beginDateStr
      * @param endDateStr
      * @return
-     * long 
+     * long
      * @author Administrator
      */
     public static long getDaySub(String beginDateStr,String endDateStr){
@@ -135,7 +134,7 @@ public class DateUtil {
         java.text.SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
         java.util.Date beginDate = null;
         java.util.Date endDate = null;
-        
+
             try {
 				beginDate = format.parse(beginDateStr);
 				endDate= format.parse(endDateStr);
@@ -144,10 +143,10 @@ public class DateUtil {
 			}
             day=(endDate.getTime()-beginDate.getTime())/(24*60*60*1000);
             //System.out.println("相隔的天数="+day);
-      
+
         return day;
     }
-    
+
     /**
      * 得到n天之后的日期
      * @param days
@@ -155,17 +154,17 @@ public class DateUtil {
      */
     public static String getAfterDayDate(String days) {
     	int daysInt = Integer.parseInt(days);
-    	
+
         Calendar canlendar = Calendar.getInstance(); // java.util包
         canlendar.add(Calendar.DATE, daysInt); // 日期减 如果不够减会将月变动
         Date date = canlendar.getTime();
-        
+
         SimpleDateFormat sdfd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateStr = sdfd.format(date);
-        
+
         return dateStr;
     }
-    
+
     /**
      * 得到n天之后是周几
      * @param days
@@ -180,7 +179,7 @@ public class DateUtil {
         String dateStr = sdf.format(date);
         return dateStr;
     }
-    
+
     public static void main(String[] args) {
     	System.out.println(getDays());
     	System.out.println(getAfterDayWeek("3"));

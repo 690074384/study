@@ -5,7 +5,7 @@ import com.lph.controller.base.BaseController;
 import com.lph.entity.system.Menu;
 import com.lph.entity.system.Role;
 import com.lph.service.system.appuser.AppuserManager;
-import com.lph.service.system.fhlog.FHlogManager;
+import com.lph.service.system.fhlog.FhLogManager;
 import com.lph.service.system.menu.MenuManager;
 import com.lph.service.system.role.RoleManager;
 import com.lph.service.system.user.UserManager;
@@ -49,7 +49,7 @@ public class RoleController extends BaseController {
     @Resource(name = "appuserService")
     private AppuserManager appuserService;
     @Resource(name = "fhlogService")
-    private FHlogManager fHlogManager;
+    private FhLogManager fHlogManager;
 
     /**
      * 进入权限首页

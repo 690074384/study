@@ -12,121 +12,80 @@ import com.lph.service.system.appuser.AppuserManager;
 import com.lph.util.PageData;
 
 
-/**类名称：AppuserService
- * @author FH Q313596790
- * 修改时间：2015年11月6日
+/**
+ * 类名称：AppuserService
+ *
+ * @author lvpenghui
+ * @since 2019-4-17 14:25:28
  */
 @Service("appuserService")
-public class AppuserService implements AppuserManager{
+public class AppuserService implements AppuserManager {
 
-	@Resource(name = "daoSupport")
-	private DaoSupport dao;
-	
-	/**列出某角色下的所有会员
-	 * @param pd
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PageData> listAllAppuserByRorlid(PageData pd) throws Exception {
-		return (List<PageData>) dao.findForList("AppuserMapper.listAllAppuserByRorlid", pd);
-	}
-	
-	/**会员列表
-	 * @param page
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PageData> listPdPageUser(Page page)throws Exception{
-		return (List<PageData>) dao.findForList("AppuserMapper.userlistPage", page);
-	}
-	
-	/**通过用户名获取数据
-	 * @param pd
-	 * @return
-	 * @throws Exception
-	 */
-	public PageData findByUsername(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("AppuserMapper.findByUsername", pd);
-	}
-	
-	/**通过邮箱获取数据
-	 * @param pd
-	 * @return
-	 * @throws Exception
-	 */
-	public PageData findByEmail(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("AppuserMapper.findByEmail", pd);
-	}
-	
-	/**通过编号获取数据
-	 * @param pd
-	 * @return
-	 * @throws Exception
-	 */
-	public PageData findByNumber(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("AppuserMapper.findByNumber", pd);
-	}
-	
-	/**保存用户
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void saveU(PageData pd)throws Exception{
-		dao.save("AppuserMapper.saveU", pd);
-	}
-	
-	/**删除用户
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void deleteU(PageData pd)throws Exception{
-		dao.delete("AppuserMapper.deleteU", pd);
-	}
-	
-	/**修改用户
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void editU(PageData pd)throws Exception{
-		dao.update("AppuserMapper.editU", pd);
-	}
-	
-	/**通过id获取数据
-	 * @param pd
-	 * @return
-	 * @throws Exception
-	 */
-	public PageData findByUiId(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("AppuserMapper.findByUiId", pd);
-	}
-	
-	/**全部会员
-	 * @param pd
-	 * @return
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PageData> listAllUser(PageData pd)throws Exception{
-		return (List<PageData>) dao.findForList("AppuserMapper.listAllUser", pd);
-	}
-	
-	/**批量删除用户
-	 * @param USER_IDS
-	 * @throws Exception
-	 */
-	public void deleteAllU(String[] USER_IDS)throws Exception{
-		dao.delete("AppuserMapper.deleteAllU", USER_IDS);
-	}
-	
-	/**获取总数
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData getAppUserCount(String value)throws Exception{
-		return (PageData)dao.findForObject("AppuserMapper.getAppUserCount", value);
-	}
-	
+    @Resource(name = "daoSupport")
+    private DaoSupport dao;
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<PageData> listAllAppuserByRorlid(PageData pd) {
+        return (List<PageData>) dao.findForList("AppuserMapper.listAllAppuserByRorlid", pd);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<PageData> listPdPageUser(Page page) {
+        return (List<PageData>) dao.findForList("AppuserMapper.userlistPage", page);
+    }
+
+    @Override
+    public PageData findByUsername(PageData pd) {
+        return (PageData) dao.findForObject("AppuserMapper.findByUsername", pd);
+    }
+
+    @Override
+    public PageData findByEmail(PageData pd) {
+        return (PageData) dao.findForObject("AppuserMapper.findByEmail", pd);
+    }
+
+    @Override
+    public PageData findByNumber(PageData pd) {
+        return (PageData) dao.findForObject("AppuserMapper.findByNumber", pd);
+    }
+
+    @Override
+    public void saveU(PageData pd) throws Exception {
+        dao.save("AppuserMapper.saveU", pd);
+    }
+
+    @Override
+    public void deleteU(PageData pd) throws Exception {
+        dao.delete("AppuserMapper.deleteU", pd);
+    }
+
+    @Override
+    public void editU(PageData pd) throws Exception {
+        dao.update("AppuserMapper.editU", pd);
+    }
+
+    @Override
+    public PageData findByUiId(PageData pd) {
+        return (PageData) dao.findForObject("AppuserMapper.findByUiId", pd);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<PageData> listAllUser(PageData pd) {
+        return (List<PageData>) dao.findForList("AppuserMapper.listAllUser", pd);
+    }
+
+    @Override
+    public void deleteAllU(String[] userIds) throws Exception {
+        dao.delete("AppuserMapper.deleteAllU", userIds);
+    }
+
+    @Override
+    public PageData getAppUserCount(String value) {
+        return (PageData) dao.findForObject("AppuserMapper.getAppUserCount", value);
+    }
+
 }
 

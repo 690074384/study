@@ -55,7 +55,7 @@ public class DatajurController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         //部门ID集
-        pd.put("DEPARTMENT_IDS", departmentService.getDEPARTMENT_IDS(pd.getString("DEPARTMENT_ID")));
+        pd.put("DEPARTMENT_IDS", departmentService.getdepartmentIds(pd.getString("DEPARTMENT_ID")));
         datajurService.edit(pd);
         mv.addObject("msg", "success");
         mv.setViewName("save_result");

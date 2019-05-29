@@ -1,5 +1,7 @@
 package com.lph.util;
 
+import org.springframework.context.ApplicationContext;
+
 /**
  * 系统静态常量
  *
@@ -8,6 +10,9 @@ package com.lph.util;
  */
 public class Constants {
 
+    public static final String NO_ORDER = "no_order";
+    public static final String BAR = "|";
+    public static final int HTTP_OK = 200;
     public static final String USERNAME = "USERNAME";
     public static final String FKEY = "FKEY";
     public static final String ERRER = "errer";
@@ -33,6 +38,8 @@ public class Constants {
     public static final String GET = "GET";
     public static final String POST = "POST";
     public static final String SUBSCRIBE = "subscribe";
+    public static final String MYSQL = "mysql";
+    static final String CALL_BACK = "callback";
     private final static String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
 
     public static final String EMPTY = "";
@@ -69,6 +76,50 @@ public class Constants {
     public static final String GET_APP_USER_BY_NAME = "getAppuserByUsername";
     public static final String REGISTER_SYS_USER = "registerSysUser";
 
-    public static final String ZIP = "registerSysUser";
+    public static final String ZIP = "zip";
+
+    public static final String SESSION_SECURITY_CODE = "sessionSecCode";
+    public static final String SESSION_USER = "sessionUser";
+    public static final String SESSION_ROLE_RIGHTS = "sessionRoleRights";
+    public static final String sSESSION_ROLE_RIGHTS = "sessionRoleRights";
+    public static final String SESSION_menuList = "menuList";
+    public static final String SESSION_allmenuList = "allmenuList";
+    public static final String SESSION_QX = "QX";
+    public static final String SESSION_USERPDS = "userpds";
+    public static final String SESSION_USERROL = "USERROL";
+    public static final String SESSION_USERNAME = "USERNAME";
+    public static final String DEPARTMENT_IDS = "DEPARTMENT_IDS";
+    public static final String DEPARTMENT_ID = "DEPARTMENT_ID";
+    public static final String TRUE = "T";
+    public static final String FALSE = "F";
+    public static final String LOGIN = "/login_toLogin.do";
+    public static final String SYSNAME = "admin/config/SYSNAME.txt";
+    public static final String PAGE = "admin/config/PAGE.txt";
+    public static final String EMAIL = "admin/config/EMAIL.txt";
+    public static final String SMS1 = "admin/config/SMS1.txt";
+    public static final String SMS2 = "admin/config/SMS2.txt";
+    public static final String FWATERM = "admin/config/FWATERM.txt";
+    public static final String IWATERM = "admin/config/IWATERM.txt";
+    public static final String WEIXIN = "admin/config/WEIXIN.txt";
+    public static final String WEBSOCKET = "admin/config/WEBSOCKET.txt";
+    public static final String LOGINEDIT = "admin/config/LOGIN.txt";
+    public static final String FILEPATHIMG = "uploadFiles/uploadImgs/";
+    public static final String FILEPATHFILE = "uploadFiles/file/";
+    public static final String FILEPATHFILEOA = "uploadFiles/uploadFile/";
+    public static final String FILEPATHTWODIMENSIONCODE = "uploadFiles/twoDimensionCode/";
+    public static final String NO_INTERCEPTOR_PATH = ".*/((login)|(logout)|(code)|(app)|(weixin)|(static)|(main)|(websocket)).*";
+    public static ApplicationContext WEB_APP_CONTEXT = null;
+
+    /**
+     * 系统用户注册接口_请求协议参数)
+     */
+    static final String[] SYSUSER_REGISTERED_PARAM_ARRAY = new String[]{"USERNAME", "PASSWORD", "NAME", "EMAIL", "rcode"};
+    static final String[] SYSUSER_REGISTERED_VALUE_ARRAY = new String[]{"用户名", "密码", "姓名", "邮箱", "验证码"};
+
+    /**
+     * app根据用户名获取会员信息接口_请求协议中的参数
+     */
+    static final String[] APP_GETAPPUSER_PARAM_ARRAY = new String[]{"USERNAME"};
+    static final String[] APP_GETAPPUSER_VALUE_ARRAY = new String[]{"用户名"};
 
 }

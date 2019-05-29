@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.lph.controller.base.BaseController;
 import com.lph.entity.Page;
-import com.lph.service.fhdb.brdb.BRdbManager;
+import com.lph.service.fhdb.brdb.BrDbManager;
 import com.lph.util.*;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -42,7 +42,7 @@ public class DatabaseController extends BaseController {
      */
     private String menuUrlb = "brdb/listAllTable.do";
     @Resource(name = "brdbService")
-    private BRdbManager brdbService;
+    private BrDbManager brdbService;
 
     /**
      * 列出所有表

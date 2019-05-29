@@ -11,6 +11,8 @@ import org.apache.shiro.subject.PrincipalCollection;
 
 
 /**
+ * shiro管理器
+ *
  * @author lvpenghui
  * @since 2019-4-11 21:03:40
  */

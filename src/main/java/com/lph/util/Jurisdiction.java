@@ -1,12 +1,11 @@
 package com.lph.util;
 
-import java.util.List;
-import java.util.Map;
-
+import com.lph.entity.system.Menu;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 
-import com.lph.entity.system.Menu;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 权限处理
@@ -29,7 +28,7 @@ public class Jurisdiction {
 		 */
 		String USERNAME = getUsername();	//获取当前登录者loginname
 		Session session = getSession();
-		List<Menu> menuList = (List<Menu>)session.getAttribute(USERNAME + Const.SESSION_allmenuList); //获取菜单列表
+		List<Menu> menuList = (List<Menu>)session.getAttribute(USERNAME + Constants.SESSION_allmenuList); //获取菜单列表
 		return readMenu(menuList,menuUrl,session,USERNAME);
 	}
 	
@@ -45,7 +44,7 @@ public class Jurisdiction {
 				if(!menuList.get(i).isHasMenu()){				//判断有无此菜单权限
 					return false;
 				}else{											//按钮判断
-					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);//按钮权限(增删改查)
+					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Constants.SESSION_QX);//按钮权限(增删改查)
 					map.remove("add");
 					map.remove("del");
 					map.remove("edit");
@@ -56,8 +55,8 @@ public class Jurisdiction {
 					map.put("del", RightsHelper.testRights(map.get("dels"), MENU_ID) || isAdmin?"1":"0");
 					map.put("edit", RightsHelper.testRights(map.get("edits"), MENU_ID) || isAdmin?"1":"0");
 					map.put("cha", RightsHelper.testRights(map.get("chas"), MENU_ID) || isAdmin?"1":"0");
-					session.removeAttribute(USERNAME + Const.SESSION_QX);
-					session.setAttribute(USERNAME + Const.SESSION_QX, map);	//重新分配按钮权限
+					session.removeAttribute(USERNAME + Constants.SESSION_QX);
+					session.setAttribute(USERNAME + Constants.SESSION_QX, map);	//重新分配按钮权限
 					return true;
 				}
 			}else{
@@ -84,7 +83,7 @@ public class Jurisdiction {
 		 */
 		String USERNAME = getUsername();	//获取当前登录者loginname
 		Session session = getSession();
-		List<Menu> menuList = (List<Menu>)session.getAttribute(USERNAME + Const.SESSION_allmenuList); //获取菜单列表
+		List<Menu> menuList = (List<Menu>)session.getAttribute(USERNAME + Constants.SESSION_allmenuList); //获取菜单列表
 		return readMenuButton(menuList,menuUrl,session,USERNAME,type);
 	}
 	
@@ -100,7 +99,7 @@ public class Jurisdiction {
 				if(!menuList.get(i).isHasMenu()){				//判断有无此菜单权限
 					return false;
 				}else{											//按钮判断
-					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Const.SESSION_QX);//按钮权限(增删改查)
+					Map<String, String> map = (Map<String, String>)session.getAttribute(USERNAME + Constants.SESSION_QX);//按钮权限(增删改查)
 					String MENU_ID =  menuList.get(i).getMENU_ID();
 					Boolean isAdmin = "admin".equals(USERNAME);
 					if("add".equals(type)){
@@ -126,21 +125,21 @@ public class Jurisdiction {
 	 * @return
 	 */
 	public static String getUsername(){
-		return getSession().getAttribute(Const.SESSION_USERNAME).toString();
+		return getSession().getAttribute(Constants.SESSION_USERNAME).toString();
 	}
 	
 	/**获取用户的最高组织机构权限集合
 	 * @return
 	 */
 	public static String getDEPARTMENT_IDS(){
-		return getSession().getAttribute(Const.DEPARTMENT_IDS).toString();
+		return getSession().getAttribute(Constants.DEPARTMENT_IDS).toString();
 	}
 	
 	/**获取用户的最高组织机构权限
 	 * @return
 	 */
 	public static String getDEPARTMENT_ID(){
-		return getSession().getAttribute(Const.DEPARTMENT_ID).toString();
+		return getSession().getAttribute(Constants.DEPARTMENT_ID).toString();
 	}
 	
 	/**获取当前按钮权限(增删改查)
@@ -148,7 +147,7 @@ public class Jurisdiction {
 	 */
 	@SuppressWarnings("unchecked")
 	public static Map<String, String> getHC(){
-		return (Map<String, String>)getSession().getAttribute(getUsername() + Const.SESSION_QX);
+		return (Map<String, String>)getSession().getAttribute(getUsername() + Constants.SESSION_QX);
 	}
 	
 	/**shiro管理的session

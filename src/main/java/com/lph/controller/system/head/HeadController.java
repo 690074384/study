@@ -67,12 +67,12 @@ public class HeadController extends BaseController {
             pd = this.getPageData();
             List<PageData> pdList = Lists.newArrayList();
             Session session = Jurisdiction.getSession();
-            PageData pds = (PageData) session.getAttribute(Const.SESSION_userpds);
+            PageData pds = (PageData) session.getAttribute(Constants.SESSION_USERPDS);
             if (null == pds) {
                 //当前登录者用户名
                 pd.put("USERNAME", Jurisdiction.getUsername());
                 pds = userService.findByUsername(pd);
-                session.setAttribute(Const.SESSION_userpds, pds);
+                session.setAttribute(Constants.SESSION_USERPDS, pds);
             }
             pdList.add(pds);
             map.put("list", pdList);
@@ -82,7 +82,7 @@ public class HeadController extends BaseController {
             //站内信未读总数
             map.put("fhsmsCount", fhsmsService.findFhsmsCount(Jurisdiction.getUsername()).get("fhsmsCount").toString());
             //读取WEBSOCKET配置
-            String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);
+            String strWEBSOCKET = Tools.readTxtFile(Constants.WEBSOCKET);
             if (null != strWEBSOCKET && !"".equals(strWEBSOCKET)) {
                 String[] strIW = strWEBSOCKET.split(",fh,");
                 if (strIW.length == Constants.FIVE) {
@@ -267,7 +267,7 @@ public class HeadController extends BaseController {
         int count = 0;
         int zcount = 0;
         //读取邮件配置
-        String emaiStr = Tools.readTxtFile(Const.EMAIL);
+        String emaiStr = Tools.readTxtFile(Constants.EMAIL);
         List<PageData> pdList = Lists.newArrayList();
         //对方邮箱
         String toEMAIL = pd.getString("EMAIL");
@@ -353,25 +353,25 @@ public class HeadController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         //读取系统名称
-        pd.put("YSYNAME", Tools.readTxtFile(Const.SYSNAME));
+        pd.put("YSYNAME", Tools.readTxtFile(Constants.SYSNAME));
         //读取每页条数
-        pd.put("COUNTPAGE", Tools.readTxtFile(Const.PAGE));
+        pd.put("COUNTPAGE", Tools.readTxtFile(Constants.PAGE));
         //读取邮件配置
-        String strEMAIL = Tools.readTxtFile(Const.EMAIL);
+        String strEMAIL = Tools.readTxtFile(Constants.EMAIL);
         //读取短信1配置
-        String strSMS1 = Tools.readTxtFile(Const.SMS1);
+        String strSMS1 = Tools.readTxtFile(Constants.SMS1);
         //读取短信2配置
-        String strSMS2 = Tools.readTxtFile(Const.SMS2);
+        String strSMS2 = Tools.readTxtFile(Constants.SMS2);
         //读取文字水印配置
-        String strFWATERM = Tools.readTxtFile(Const.FWATERM);
+        String strFWATERM = Tools.readTxtFile(Constants.FWATERM);
         //读取图片水印配置
-        String strIWATERM = Tools.readTxtFile(Const.IWATERM);
+        String strIWATERM = Tools.readTxtFile(Constants.IWATERM);
         //读取微信配置
-        pd.put("Token", Tools.readTxtFile(Const.WEIXIN));
+        pd.put("Token", Tools.readTxtFile(Constants.WEIXIN));
         //读取微信配置
-        String strWEBSOCKET = Tools.readTxtFile(Const.WEBSOCKET);
+        String strWEBSOCKET = Tools.readTxtFile(Constants.WEBSOCKET);
         //读取登录页面配置
-        String strLOGINEDIT = Tools.readTxtFile(Const.LOGINEDIT);
+        String strLOGINEDIT = Tools.readTxtFile(Constants.LOGINEDIT);
 
         this.setParamToPd(pd, strEMAIL, strSMS1, strSMS2, strFWATERM, strIWATERM, strWEBSOCKET, strLOGINEDIT);
         mv.setViewName("system/head/sys_edit");
@@ -482,15 +482,15 @@ public class HeadController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         //写入系统名称
-        Tools.writeFile(Const.SYSNAME, pd.getString("YSYNAME"));
+        Tools.writeFile(Constants.SYSNAME, pd.getString("YSYNAME"));
         //写入每页条数
-        Tools.writeFile(Const.PAGE, pd.getString("COUNTPAGE"));
+        Tools.writeFile(Constants.PAGE, pd.getString("COUNTPAGE"));
         //写入邮件服务器配置
-        Tools.writeFile(Const.EMAIL, pd.getString("SMTP") + ",fh," + pd.getString("PORT") + ",fh," + pd.getString("EMAIL") + ",fh," + pd.getString("PAW"));
+        Tools.writeFile(Constants.EMAIL, pd.getString("SMTP") + ",fh," + pd.getString("PORT") + ",fh," + pd.getString("EMAIL") + ",fh," + pd.getString("PAW"));
         //写入短信1配置
-        Tools.writeFile(Const.SMS1, pd.getString("SMSU1") + ",fh," + pd.getString("SMSPAW1"));
+        Tools.writeFile(Constants.SMS1, pd.getString("SMSU1") + ",fh," + pd.getString("SMSPAW1"));
         //写入短信2配置
-        Tools.writeFile(Const.SMS2, pd.getString("SMSU2") + ",fh," + pd.getString("SMSPAW2"));
+        Tools.writeFile(Constants.SMS2, pd.getString("SMSU2") + ",fh," + pd.getString("SMSPAW2"));
         mv.addObject("msg", "OK");
         mv.setViewName("save_result");
         return mv;
@@ -510,9 +510,9 @@ public class HeadController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         //文字水印配置
-        Tools.writeFile(Const.FWATERM, pd.getString("isCheck1") + ",fh," + pd.getString("fcontent") + ",fh," + pd.getString("fontSize") + ",fh," + pd.getString("fontX") + ",fh," + pd.getString("fontY"));
+        Tools.writeFile(Constants.FWATERM, pd.getString("isCheck1") + ",fh," + pd.getString("fcontent") + ",fh," + pd.getString("fontSize") + ",fh," + pd.getString("fontX") + ",fh," + pd.getString("fontY"));
         //图片水印配置
-        Tools.writeFile(Const.IWATERM, pd.getString("isCheck2") + ",fh," + pd.getString("imgUrl") + ",fh," + pd.getString("imgX") + ",fh," + pd.getString("imgY"));
+        Tools.writeFile(Constants.IWATERM, pd.getString("isCheck2") + ",fh," + pd.getString("imgUrl") + ",fh," + pd.getString("imgX") + ",fh," + pd.getString("imgY"));
         Watermark.fushValue();
         mv.addObject("msg", "OK");
         mv.setViewName("save_result");
@@ -533,9 +533,9 @@ public class HeadController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         //写入微信配置
-        Tools.writeFile(Const.WEIXIN, pd.getString("Token"));
+        Tools.writeFile(Constants.WEIXIN, pd.getString("Token"));
         //websocket配置
-        Tools.writeFile(Const.WEBSOCKET, pd.getString("WIMIP") + ",fh," + pd.getString("WIMPORT") + ",fh," + pd.getString("OLIP") + ",fh," + pd.getString("OLPORT") + ",fh," + pd.getString("FHsmsSound"));
+        Tools.writeFile(Constants.WEBSOCKET, pd.getString("WIMIP") + ",fh," + pd.getString("WIMPORT") + ",fh," + pd.getString("OLIP") + ",fh," + pd.getString("OLPORT") + ",fh," + pd.getString("FHsmsSound"));
         mv.addObject("msg", "OK");
         mv.setViewName("save_result");
         return mv;
@@ -554,7 +554,7 @@ public class HeadController extends BaseController {
         ModelAndView mv = this.getModelAndView();
         PageData pd = this.getPageData();
         //登录页面配置
-        Tools.writeFile(Const.LOGINEDIT, pd.getString("isZhuce") + ",fh," + pd.getString("isMusic"));
+        Tools.writeFile(Constants.LOGINEDIT, pd.getString("isZhuce") + ",fh," + pd.getString("isMusic"));
         mv.addObject("msg", "OK");
         mv.setViewName("save_result");
         return mv;

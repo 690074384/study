@@ -2,37 +2,45 @@ package com.lph.service.fhoa.datajur;
 
 import com.lph.util.PageData;
 
-/** 
+/**
  * 说明： 组织数据权限接口
- * 创建人：FH Q313596790
- * 创建时间：2016-04-26
- * @version
+ *
+ * @author lvpenghui
+ * @since 2019-4-17 10:54:35
  */
-public interface DatajurManager{
+public interface DatajurManager {
 
-	/**新增
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void save(PageData pd)throws Exception;
-	
-	/**修改
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void edit(PageData pd)throws Exception;
-	
-	/**通过id获取数据
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData findById(PageData pd)throws Exception;
-	
-	/**取出某用户的组织数据权限
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData getDEPARTMENT_IDS(String USERNAME)throws Exception;
-	
+    /**
+     * 新增
+     *
+     * @param pd PageData对象
+     * @throws Exception 可能抛出的异常
+     */
+    void save(PageData pd) throws Exception;
+
+    /**
+     * 修改
+     *
+     * @param pd PageData对象
+     * @throws Exception 可能抛出的异常
+     */
+    void edit(PageData pd) throws Exception;
+
+    /**
+     * 通过id获取数据
+     *
+     * @param pd PageData对象
+     * @throws Exception 可能抛出的异常
+     */
+    PageData findById(PageData pd) throws Exception;
+
+    /**
+     * 取出某用户的组织数据权限
+     *
+     * @param username 用户名
+     * @throws Exception 可能抛出的异常
+     */
+    PageData getDepartmentIds(String username) throws Exception;
+
 }
 

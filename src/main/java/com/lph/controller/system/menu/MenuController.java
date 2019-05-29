@@ -3,7 +3,7 @@ package com.lph.controller.system.menu;
 import com.google.common.collect.Maps;
 import com.lph.controller.base.BaseController;
 import com.lph.entity.system.Menu;
-import com.lph.service.system.fhlog.FHlogManager;
+import com.lph.service.system.fhlog.FhLogManager;
 import com.lph.service.system.menu.MenuManager;
 import com.lph.util.*;
 import net.sf.json.JSONArray;
@@ -35,7 +35,7 @@ public class MenuController extends BaseController {
     @Resource(name = "menuService")
     private MenuManager menuService;
     @Resource(name = "fhlogService")
-    private FHlogManager fHlogManager;
+    private FhLogManager fHlogManager;
 
     /**
      * 显示菜单列表
@@ -304,7 +304,7 @@ public class MenuController extends BaseController {
                 menuUrl = "login_default.do";
             }
             //获取本角色菜单权限
-            String roleRights = Jurisdiction.getSession().getAttribute(Jurisdiction.getUsername() + Const.SESSION_ROLE_RIGHTS).toString();
+            String roleRights = Jurisdiction.getSession().getAttribute(Jurisdiction.getUsername() + Constants.SESSION_ROLE_RIGHTS).toString();
             //获取某菜单下所有子菜单
             List<Menu> athmenuList = menuService.listAllMenuQx(menuId);
             //根据权限分配菜单

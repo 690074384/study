@@ -4,7 +4,6 @@ import com.lph.controller.base.BaseController;
 import com.lph.service.weixin.command.CommandService;
 import com.lph.service.weixin.imgmsg.ImgmsgService;
 import com.lph.service.weixin.textmsg.TextmsgService;
-import com.lph.util.Const;
 import com.lph.util.Constants;
 import com.lph.util.PageData;
 import com.lph.util.Tools;
@@ -81,7 +80,7 @@ public class WeixinController extends BaseController {
                     }
                 };
                 //读取Token(令牌)
-                list.add(Tools.readTxtFile(Const.WEIXIN));
+                list.add(Tools.readTxtFile(Constants.WEIXIN));
                 list.add(timestamp);
                 list.add(nonce);
                 // 排序

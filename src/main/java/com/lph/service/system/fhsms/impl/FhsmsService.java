@@ -2,89 +2,66 @@ package com.lph.service.system.fhsms.impl;
 
 import java.util.List;
 import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 import com.lph.dao.DaoSupport;
 import com.lph.entity.Page;
 import com.lph.util.PageData;
 import com.lph.service.system.fhsms.FhsmsManager;
 
-/** 
+/**
  * 说明： 站内信
- * 创建人：FH Q313596790
- * 创建时间：2016-01-17
- * @version
+ *
+ * @author lvpenghui
+ * @since 2019-4-17 15:53:37
  */
 @Service("fhsmsService")
-public class FhsmsService implements FhsmsManager{
+public class FhsmsService implements FhsmsManager {
 
-	@Resource(name = "daoSupport")
-	private DaoSupport dao;
-	
-	/**新增
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void save(PageData pd)throws Exception{
-		dao.save("FhsmsMapper.save", pd);
-	}
-	
-	/**删除
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void delete(PageData pd)throws Exception{
-		dao.delete("FhsmsMapper.delete", pd);
-	}
-	
-	/**修改状态
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void edit(PageData pd)throws Exception{
-		dao.update("FhsmsMapper.edit", pd);
-	}
-	
-	/**列表
-	 * @param page
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PageData> list(Page page)throws Exception{
-		return (List<PageData>)dao.findForList("FhsmsMapper.datalistPage", page);
-	}
-	
-	/**列表(全部)
-	 * @param pd
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	public List<PageData> listAll(PageData pd)throws Exception{
-		return (List<PageData>)dao.findForList("FhsmsMapper.listAll", pd);
-	}
-	
-	/**通过id获取数据
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData findById(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("FhsmsMapper.findById", pd);
-	}
-	
-	/**获取未读总数
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData findFhsmsCount(String USERNAME)throws Exception{
-		return (PageData)dao.findForObject("FhsmsMapper.findFhsmsCount", USERNAME);
-	}
-	
-	/**批量删除
-	 * @param ArrayDATA_IDS
-	 * @throws Exception
-	 */
-	public void deleteAll(String[] ArrayDATA_IDS)throws Exception{
-		dao.delete("FhsmsMapper.deleteAll", ArrayDATA_IDS);
-	}
-	
+    @Resource(name = "daoSupport")
+    private DaoSupport dao;
+
+    @Override
+    public void save(PageData pd) throws Exception {
+        dao.save("FhsmsMapper.save", pd);
+    }
+
+    @Override
+    public void delete(PageData pd) throws Exception {
+        dao.delete("FhsmsMapper.delete", pd);
+    }
+
+    @Override
+    public void edit(PageData pd) throws Exception {
+        dao.update("FhsmsMapper.edit", pd);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<PageData> list(Page page) throws Exception {
+        return (List<PageData>) dao.findForList("FhsmsMapper.datalistPage", page);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<PageData> listAll(PageData pd) throws Exception {
+        return (List<PageData>) dao.findForList("FhsmsMapper.listAll", pd);
+    }
+
+    @Override
+    public PageData findById(PageData pd) throws Exception {
+        return (PageData) dao.findForObject("FhsmsMapper.findById", pd);
+    }
+
+    @Override
+    public PageData findFhsmsCount(String username) {
+        return (PageData) dao.findForObject("FhsmsMapper.findFhsmsCount", username);
+    }
+
+    @Override
+    public void deleteAll(String[] arrayDataIds) throws Exception {
+        dao.delete("FhsmsMapper.deleteAll", arrayDataIds);
+    }
+
 }
 

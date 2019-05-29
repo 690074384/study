@@ -91,7 +91,7 @@ public class PicturesController extends BaseController {
         if (Jurisdiction.buttonJurisdiction(menuUrl, Constants.ADDD)) {
             if (null != file && !file.isEmpty()) {
                 //文件上传路径
-                String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;
+                String filePath = PathUtil.getClasspath() + Constants.FILEPATHIMG + ffile;
                 //执行上传
                 fileName = FileUpload.fileUp(file, filePath, this.get32UUID());
             } else {
@@ -107,7 +107,7 @@ public class PicturesController extends BaseController {
             //备注
             pd.put("BZ", "图片管理处上传");
             //加水印
-            Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);
+            Watermark.setWatemark(PathUtil.getClasspath() + Constants.FILEPATHIMG + ffile + "/" + fileName);
             picturesService.save(pd);
         }
         map.put("result", "ok");
@@ -130,7 +130,7 @@ public class PicturesController extends BaseController {
         if (Jurisdiction.buttonJurisdiction(menuUrl, Constants.DELE)) {
             pd = this.getPageData();
             //删除图片
-            DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH"));
+            DelAllFile.delFolder(PathUtil.getClasspath() + Constants.FILEPATHIMG + pd.getString("PATH"));
             picturesService.delete(pd);
         }
         out.write("success");
@@ -175,7 +175,7 @@ public class PicturesController extends BaseController {
             String ffile = DateUtil.getDays(), fileName = "";
             if (null != file && !file.isEmpty()) {
                 //文件上传路径
-                String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;
+                String filePath = PathUtil.getClasspath() + Constants.FILEPATHIMG + ffile;
                 //执行上传
                 fileName = FileUpload.fileUp(file, filePath, this.get32UUID());
                 //路径
@@ -185,7 +185,7 @@ public class PicturesController extends BaseController {
                 pd.put("PATH", path);
             }
             //加水印
-            Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);
+            Watermark.setWatemark(PathUtil.getClasspath() + Constants.FILEPATHIMG + ffile + "/" + fileName);
             //执行修改数据库
             picturesService.edit(pd);
         }
@@ -244,7 +244,7 @@ public class PicturesController extends BaseController {
                 pathList = picturesService.getAllById(allDatas);
                 for (PageData aPathList : pathList) {
                     //删除图片
-                    DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + aPathList.getString("PATH"));
+                    DelAllFile.delFolder(PathUtil.getClasspath() + Constants.FILEPATHIMG + aPathList.getString("PATH"));
                 }
                 picturesService.deleteAll(allDatas);
                 pd.put("msg", "ok");
@@ -269,7 +269,7 @@ public class PicturesController extends BaseController {
         //图片路径
         String path = pd.getString("PATH");
         //删除图片
-        DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH"));
+        DelAllFile.delFolder(PathUtil.getClasspath() + Constants.FILEPATHIMG + pd.getString("PATH"));
         if (null != path) {
             //删除数据库中图片数据
             picturesService.delTp(pd);
@@ -314,7 +314,7 @@ public class PicturesController extends BaseController {
                 if (Constants.SAVE.equals(msg)) {
                     String ffile = DateUtil.getDays();
                     //文件上传路径
-                    String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;
+                    String filePath = PathUtil.getClasspath() + Constants.FILEPATHIMG + ffile;
                     //把网络图片保存到服务器硬盘，并数据库记录
                     for (String anImgList : imgList) {
                         //下载网络图片上传到服务器上
@@ -327,7 +327,7 @@ public class PicturesController extends BaseController {
                         pd.put("CREATETIME", Tools.date2Str(new Date()));
                         pd.put("MASTER_ID", "1");
                         pd.put("BZ", serverUrl + "爬取");
-                        Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);
+                        Watermark.setWatemark(PathUtil.getClasspath() + Constants.FILEPATHIMG + ffile + "/" + fileName);
                         picturesService.save(pd);
                     }
                 }

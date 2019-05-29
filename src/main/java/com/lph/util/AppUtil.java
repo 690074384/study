@@ -1,16 +1,16 @@
 package com.lph.util;
 
+import com.google.common.collect.Lists;
 import org.codehaus.jackson.map.util.JSONPObject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 接口参数校验
  *
- * @author: lph qq313596790[青苔]
- * 修改日期：2015/11/2
+ * @author lvpenghui
+ * @since 2019-4-17 17:23:35
  */
 public class AppUtil {
 
@@ -19,9 +19,9 @@ public class AppUtil {
     /**
      * 检查参数是否完整
      *
-     * @param method
-     * @param pd
-     * @return
+     * @param method 方法
+     * @param pd     PageData对象
+     * @return 参数是否完整
      */
     public static boolean checkParam(String method, PageData pd) {
         boolean result = false;
@@ -29,15 +29,19 @@ public class AppUtil {
         int falseCount = 0;
         String[] paramArray = new String[20];
         String[] valueArray = new String[20];
-        String[] tempArray = new String[20];  //临时数组
+        //临时数组
+        String[] tempArray = new String[20];
 
-        if ("registerSysUser".equals(method)) {// 注册
-            paramArray = Const.SYSUSER_REGISTERED_PARAM_ARRAY;  //参数
-            valueArray = Const.SYSUSER_REGISTERED_VALUE_ARRAY;  //参数名称
+        // 注册
+        if (Constants.REGISTER_SYS_USER.equals(method)) {
+            //参数
+            paramArray = Constants.SYSUSER_REGISTERED_PARAM_ARRAY;
+            //参数名称
+            valueArray = Constants.SYSUSER_REGISTERED_VALUE_ARRAY;
             //根据用户名获取会员信息
         } else if (Constants.GET_APP_USER_BY_NAME.equals(method)) {
-            paramArray = Const.APP_GETAPPUSER_PARAM_ARRAY;
-            valueArray = Const.APP_GETAPPUSER_VALUE_ARRAY;
+            paramArray = Constants.APP_GETAPPUSER_PARAM_ARRAY;
+            valueArray = Constants.APP_GETAPPUSER_VALUE_ARRAY;
         }
         int size = paramArray.length;
         for (int i = 0; i < size; i++) {
@@ -62,47 +66,50 @@ public class AppUtil {
     /**
      * 设置分页的参数
      *
-     * @param pd
-     * @return
+     * @param pd PageData对象
+     * @return PageData对象
      */
     public static PageData setPageParam(PageData pd) {
-        String page_now_str = pd.get("page_now").toString();
-        int pageNowInt = Integer.parseInt(page_now_str) - 1;
-        String page_size_str = pd.get("page_size").toString(); //每页显示记录数
-        int pageSizeInt = Integer.parseInt(page_size_str);
-        String page_now = pageNowInt + "";
-        String page_start = (pageNowInt * pageSizeInt) + "";
-        pd.put("page_now", page_now);
-        pd.put("page_start", page_start);
+        String pageNowStr = pd.get("page_now").toString();
+        int pageNowInt = Integer.parseInt(pageNowStr) - 1;
+        //每页显示记录数
+        String pageSizeStr = pd.get("page_size").toString();
+        int pageSizeInt = Integer.parseInt(pageSizeStr);
+        String pageNow = pageNowInt + "";
+        String pageStart = (pageNowInt * pageSizeInt) + "";
+        pd.put("page_now", pageNow);
+        pd.put("page_start", pageStart);
         return pd;
     }
 
     /**
      * 设置list中的distance
      *
-     * @param list
-     * @param pd
-     * @return
+     * @param list List<PageData>对象
+     * @param pd   PageData对象
+     * @return List<PageData>对象
      */
     public static List<PageData> setListDistance(List<PageData> list, PageData pd) {
-        List<PageData> listReturn = new ArrayList<PageData>();
-        String user_longitude = "";
-        String user_latitude = "";
+        List<PageData> listReturn = Lists.newArrayList();
+        String userLongitude = "";
+        String userLatitude = "";
         try {
-            user_longitude = pd.get("user_longitude").toString(); //"117.11811";
-            user_latitude = pd.get("user_latitude").toString();  //"36.68484";
+            //"117.11811"
+            userLongitude = pd.get("user_longitude").toString();
+            //"36.68484"
+            userLatitude = pd.get("user_latitude").toString();
+
         } catch (Exception e) {
             logger.error("缺失参数--user_longitude和user_longitude");
             logger.error("lost param：user_longitude and user_longitude");
         }
-        PageData pdTemp = new PageData();
-        int size = list.size();
-        for (int i = 0; i < size; i++) {
-            pdTemp = list.get(i);
+        PageData pdTemp;
+        for (PageData aList : list) {
+            pdTemp = aList;
             String longitude = pdTemp.get("longitude").toString();
             String latitude = pdTemp.get("latitude").toString();
             String distance = MapDistance.getDistance(
-                    user_longitude, user_latitude,
+                    userLongitude, userLatitude,
                     longitude, latitude
             );
             pdTemp.put("distance", distance);
@@ -113,12 +120,12 @@ public class AppUtil {
     }
 
     /**
-     * @param pd
-     * @param map
-     * @return
+     * @param pd  PageData对象
+     * @param map Map对象
+     * @return 返回结果
      */
     public static Object returnObject(PageData pd, Map map) {
-        if (pd.containsKey("callback")) {
+        if (pd.containsKey(Constants.CALL_BACK)) {
             String callback = pd.get("callback").toString();
             return new JSONPObject(callback, map);
         } else {

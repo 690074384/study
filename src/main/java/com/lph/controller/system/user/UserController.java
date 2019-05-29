@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.lph.controller.base.BaseController;
 import com.lph.entity.Page;
 import com.lph.entity.system.Role;
-import com.lph.service.system.fhlog.FHlogManager;
+import com.lph.service.system.fhlog.FhLogManager;
 import com.lph.service.system.role.RoleManager;
 import com.lph.service.system.user.UserManager;
 import com.lph.util.*;
@@ -47,7 +47,7 @@ public class UserController extends BaseController {
     @Resource(name = "roleService")
     private RoleManager roleService;
     @Resource(name = "fhlogService")
-    private FHlogManager fHlogManager;
+    private FhLogManager fHlogManager;
 
     /**
      * 显示用户列表
@@ -495,7 +495,7 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "/downExcel")
     public void downExcel(HttpServletResponse response) throws Exception {
-        FileDownload.fileDownload(response, PathUtil.getClasspath() + Const.FILEPATHFILE + "Users.xls", "Users.xls");
+        FileDownload.fileDownload(response, PathUtil.getClasspath() + Constants.FILEPATHFILE + "Users.xls", "Users.xls");
     }
 
     /**
@@ -518,7 +518,7 @@ public class UserController extends BaseController {
         }
         if (null != file && !file.isEmpty()) {
             //文件上传路径
-            String filePath = PathUtil.getClasspath() + Const.FILEPATHFILE;
+            String filePath = PathUtil.getClasspath() + Constants.FILEPATHFILE;
             //执行上传
             String fileName = FileUpload.fileUp(file, filePath, "userexcel");
             //执行读EXCEL操作,读出的数据导入List 2:从第3行开始；0:从第A列开始；0:第0个sheet

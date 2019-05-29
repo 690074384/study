@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.lph.controller.base.BaseController;
 import com.lph.entity.Page;
-import com.lph.service.system.fhlog.FHlogManager;
+import com.lph.service.system.fhlog.FhLogManager;
 import com.lph.util.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -35,7 +35,7 @@ public class LogHistoryController extends BaseController {
 
     private String menuUrl = "fhlog/list.do";
     @Resource(name = "fhlogService")
-    private FHlogManager fhlogService;
+    private FhLogManager fhlogService;
 
     /**
      * 删除

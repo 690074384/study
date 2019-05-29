@@ -11,9 +11,9 @@ import com.lph.service.system.user.UserManager;
  */
 public final class ServiceHelper {
 	
-	public static Object getService(String serviceName){
+	private static Object getService(String serviceName){
 		//WebApplicationContextUtils.
-		return Const.WEB_APP_CONTEXT.getBean(serviceName);
+		return Constants.WEB_APP_CONTEXT.getBean(serviceName);
 	}
 	
 	public static UserManager getUserService(){

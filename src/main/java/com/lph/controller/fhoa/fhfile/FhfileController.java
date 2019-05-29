@@ -56,7 +56,7 @@ public class FhfileController extends BaseController {
         //部门ID
         pd.put("DEPARTMENT_ID", Jurisdiction.getDEPARTMENT_ID());
         //文件大小
-        pd.put("FILESIZE", FileUtil.getFilesize(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH")));
+        pd.put("FILESIZE", FileUtil.getFilesize(PathUtil.getClasspath() + Constants.FILEPATHFILEOA + pd.getString("FILEPATH")));
         fhfileService.save(pd);
         mv.addObject("msg", "success");
         mv.setViewName("save_result");
@@ -80,7 +80,7 @@ public class FhfileController extends BaseController {
         pd = fhfileService.findById(pd);
         fhfileService.delete(pd);
         //删除文件
-        DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + pd.getString("FILEPATH"));
+        DelAllFile.delFolder(PathUtil.getClasspath() + Constants.FILEPATHFILEOA + pd.getString("FILEPATH"));
         out.write("success");
         out.close();
     }
@@ -157,7 +157,7 @@ public class FhfileController extends BaseController {
                 fpd.put("FHFILE_ID", allData);
                 fpd = fhfileService.findById(fpd);
                 //删除物理文件
-                DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHFILEOA + fpd.getString("FILEPATH"));
+                DelAllFile.delFolder(PathUtil.getClasspath() + Constants.FILEPATHFILEOA + fpd.getString("FILEPATH"));
             }
             //删除数据库记录
             fhfileService.deleteAll(allDatas);
@@ -181,7 +181,7 @@ public class FhfileController extends BaseController {
         PageData pd = this.getPageData();
         pd = fhfileService.findById(pd);
         String fileName = pd.getString("FILEPATH");
-        FileDownload.fileDownload(response, PathUtil.getClasspath() + Const.FILEPATHFILEOA + fileName, pd.getString("NAME") + fileName.substring(19));
+        FileDownload.fileDownload(response, PathUtil.getClasspath() + Constants.FILEPATHFILEOA + fileName, pd.getString("NAME") + fileName.substring(19));
     }
 
     @InitBinder

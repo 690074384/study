@@ -1,7 +1,7 @@
 package com.lph.controller.fhdb.timingbackup;
 
 import com.lph.controller.base.BaseController;
-import com.lph.service.fhdb.brdb.impl.BRdbService;
+import com.lph.service.fhdb.brdb.impl.BrDbService;
 import com.lph.service.fhdb.timingbackup.impl.TimingBackUpService;
 import com.lph.util.*;
 import org.quartz.Job;
@@ -32,7 +32,7 @@ public class DbBackupQuartzJob extends BaseController implements Job {
 
         //普通类从spring容器中拿出service
         WebApplicationContext webctx = ContextLoader.getCurrentWebApplicationContext();
-        BRdbService brdbService = (BRdbService) webctx.getBean("brdbService");
+        BrDbService brdbService = (BrDbService) webctx.getBean("brdbService");
         PageData pd = new PageData();
         try {
             //调用数据库备份

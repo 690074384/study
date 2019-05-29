@@ -1,10 +1,10 @@
 package com.lph.controller.app.sysuser;
 
+import com.google.common.collect.Maps;
 import com.lph.controller.base.BaseController;
-import com.lph.service.system.fhlog.FHlogManager;
+import com.lph.service.system.fhlog.FhLogManager;
 import com.lph.service.system.user.UserManager;
 import com.lph.util.*;
-import com.google.common.collect.Maps;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.session.Session;
 import org.springframework.stereotype.Controller;
@@ -35,7 +35,7 @@ public class SysUserController extends BaseController {
     @Resource(name = "userService")
     private UserManager userService;
     @Resource(name = "fhlogService")
-    private FHlogManager fHlogManager;
+    private FhLogManager fHlogManager;
 
     /**
      * 系统用户注册接口
@@ -57,7 +57,7 @@ public class SysUserController extends BaseController {
 
                     Session session = Jurisdiction.getSession();
                     //获取session中的验证码
-                    String sessionCode = (String) session.getAttribute(Const.SESSION_SECURITY_CODE);
+                    String sessionCode = (String) session.getAttribute(Constants.SESSION_SECURITY_CODE);
                     String rcode = pd.getString("rcode");
                     //判断登录验证码
                     if (Tools.notEmpty(sessionCode) && sessionCode.equalsIgnoreCase(rcode)) {

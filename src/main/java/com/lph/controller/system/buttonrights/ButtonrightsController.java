@@ -5,7 +5,7 @@ import com.lph.controller.base.BaseController;
 import com.lph.entity.system.Role;
 import com.lph.service.system.buttonrights.ButtonrightsManager;
 import com.lph.service.system.fhbutton.FhbuttonManager;
-import com.lph.service.system.fhlog.FHlogManager;
+import com.lph.service.system.fhlog.FhLogManager;
 import com.lph.service.system.role.RoleManager;
 import com.lph.util.*;
 import org.apache.commons.lang.StringUtils;
@@ -41,7 +41,7 @@ public class ButtonrightsController extends BaseController {
     @Resource(name = "fhbuttonService")
     private FhbuttonManager fhbuttonService;
     @Resource(name = "fhlogService")
-    private FHlogManager fHlogManager;
+    private FhLogManager fHlogManager;
 
     /**
      * 列表

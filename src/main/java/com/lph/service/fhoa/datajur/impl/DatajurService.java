@@ -8,50 +8,37 @@ import com.lph.dao.DaoSupport;
 import com.lph.util.PageData;
 import com.lph.service.fhoa.datajur.DatajurManager;
 
-/** 
+/**
  * 说明： 组织数据权限表
- * 创建人：FH Q313596790
- * 创建时间：2016-04-26
- * @version
+ *
+ * @author lvpenghui
+ * @since 2019-4-17 10:57:19
  */
 @Service("datajurService")
-public class DatajurService implements DatajurManager{
+public class DatajurService implements DatajurManager {
 
-	@Resource(name = "daoSupport")
-	private DaoSupport dao;
-	
-	/**新增
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void save(PageData pd)throws Exception{
-		dao.save("DatajurMapper.save", pd);
-	}
-	
-	/**修改
-	 * @param pd
-	 * @throws Exception
-	 */
-	public void edit(PageData pd)throws Exception{
-		dao.update("DatajurMapper.edit", pd);
-	}
-	
-	
-	/**通过id获取数据
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData findById(PageData pd)throws Exception{
-		return (PageData)dao.findForObject("DatajurMapper.findById", pd);
-	}
-	
-	/**取出某用户的组织数据权限
-	 * @param pd
-	 * @throws Exception
-	 */
-	public PageData getDEPARTMENT_IDS(String USERNAME)throws Exception{
-		return (PageData)dao.findForObject("DatajurMapper.getDEPARTMENT_IDS", USERNAME);
-	}
-	
+    @Resource(name = "daoSupport")
+    private DaoSupport dao;
+
+    @Override
+    public void save(PageData pd) throws Exception {
+        dao.save("DatajurMapper.save", pd);
+    }
+
+    @Override
+    public void edit(PageData pd) throws Exception {
+        dao.update("DatajurMapper.edit", pd);
+    }
+
+    @Override
+    public PageData findById(PageData pd) throws Exception {
+        return (PageData) dao.findForObject("DatajurMapper.findById", pd);
+    }
+
+    @Override
+    public PageData getDepartmentIds(String username) {
+        return (PageData) dao.findForObject("DatajurMapper.getDepartmentIds", username);
+    }
+
 }
 

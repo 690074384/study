@@ -1,4 +1,4 @@
-package com.lph.plugin.websocketInstantMsg;
+package com.lph.plugin.websocketinstantmsg;
 
 import net.sf.json.JSONObject;
 import org.java_websocket.WebSocket;
@@ -9,7 +9,6 @@ import org.java_websocket.server.WebSocketServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.UnknownHostException;
 import java.util.Date;
 
 
@@ -59,11 +58,14 @@ public class ChatServer extends WebSocketServer {
         }
         if (null != message && message.contains("fhadmin886")) {
             String toUser = message.substring(message.indexOf("fhadmin886") + 10, message.indexOf("fhfhadmin888"));
-            message = message.substring(0, message.indexOf("fhadmin886")) + "[私信]  " + message.substring(message.indexOf("fhfhadmin888") + 12, message.length());
-            ChatServerPool.sendMessageToUser(ChatServerPool.getWebSocketByUser(toUser), message);//向所某用户发送消息
-            ChatServerPool.sendMessageToUser(conn, message);//同时向本人发送消息
+            message = message.substring(0, message.indexOf("fhadmin886")) + "[私信]  " + message.substring(message.indexOf("fhfhadmin888") + 12);
+            //向所某用户发送消息
+            ChatServerPool.sendMessageToUser(ChatServerPool.getWebSocketByUser(toUser), message);
+            //同时向本人发送消息
+            ChatServerPool.sendMessageToUser(conn, message);
         } else {
-            ChatServerPool.sendMessage(message.toString());//向所有在线用户发送消息
+            //向所有在线用户发送消息
+            ChatServerPool.sendMessage(message);
         }
     }
 
@@ -87,41 +89,49 @@ public class ChatServer extends WebSocketServer {
      *
      * @param user
      */
-    public void userjoin(String user, WebSocket conn) {
+    private void userjoin(String user, WebSocket conn) {
         JSONObject result = new JSONObject();
         result.element("type", "user_join");
         result.element("user", "<a onclick=\"toUserMsg('" + user + "');\">" + user + "</a>");
-        ChatServerPool.sendMessage(result.toString());                //把当前用户加入到所有在线用户列表中
-        String joinMsg = "{\"from\":\"[系统]\",\"content\":\"" + user + "上线了\",\"timestamp\":" + new Date().getTime() + ",\"type\":\"message\"}";
-        ChatServerPool.sendMessage(joinMsg);                        //向所有在线用户推送当前用户上线的消息
+        //把当前用户加入到所有在线用户列表中
+        ChatServerPool.sendMessage(result.toString());
+        String joinMsg = "{\"from\":\"[系统]\",\"content\":\"" + user + "上线了\",\"timestamp\":" + System.currentTimeMillis() + ",\"type\":\"message\"}";
+        //向所有在线用户推送当前用户上线的消息
+        ChatServerPool.sendMessage(joinMsg);
         result = new JSONObject();
         result.element("type", "get_online_user");
-        ChatServerPool.addUser(user, conn);                            //向连接池添加当前的连接对象
+        //向连接池添加当前的连接对象
+        ChatServerPool.addUser(user, conn);
         result.element("list", ChatServerPool.getOnlineUser());
-        ChatServerPool.sendMessageToUser(conn, result.toString());    //向当前连接发送当前在线用户的列表
+        //向当前连接发送当前在线用户的列表
+        ChatServerPool.sendMessageToUser(conn, result.toString());
     }
 
     /**
      * 用户下线处理
      *
-     * @param conn
+     * @param conn websocket长连接
      */
-    public void userLeave(WebSocket conn) {
+    private void userLeave(WebSocket conn) {
         String user = ChatServerPool.getUserByKey(conn);
-        boolean b = ChatServerPool.removeUser(conn);                //在连接池中移除连接
+        //在连接池中移除连接
+        boolean b = ChatServerPool.removeUser(conn);
         if (b) {
             JSONObject result = new JSONObject();
             result.element("type", "user_leave");
             result.element("user", "<a onclick=\"toUserMsg('" + user + "');\">" + user + "</a>");
-            ChatServerPool.sendMessage(result.toString());            //把当前用户从所有在线用户列表中删除
-            String joinMsg = "{\"from\":\"[系统]\",\"content\":\"" + user + "下线了\",\"timestamp\":" + new Date().getTime() + ",\"type\":\"message\"}";
-            ChatServerPool.sendMessage(joinMsg);                    //向在线用户发送当前用户退出的消息
+            //把当前用户从所有在线用户列表中删除
+            ChatServerPool.sendMessage(result.toString());
+            String joinMsg = "{\"from\":\"[系统]\",\"content\":\"" + user + "下线了\",\"timestamp\":" + System.currentTimeMillis() + ",\"type\":\"message\"}";
+            //向在线用户发送当前用户退出的消息
+            ChatServerPool.sendMessage(joinMsg);
         }
     }
 
-    public static void main(String[] args) throws InterruptedException, IOException {
+    public static void main(String[] args) {
         WebSocketImpl.DEBUG = false;
-        int port = 8887; //端口
+        //端口
+        int port = 8887;
         ChatServer s = new ChatServer(port);
         s.start();
         //System.out.println( "服务器的端口" + s.getPort() );

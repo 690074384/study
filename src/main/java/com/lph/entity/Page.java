@@ -1,6 +1,6 @@
 package com.lph.entity;
 
-import com.lph.util.Const;
+import com.lph.util.Constants;
 import com.lph.util.PageData;
 import com.lph.util.Tools;
 
@@ -45,7 +45,7 @@ public class Page {
 
     public Page() {
         try {
-            this.showCount = Integer.parseInt(Tools.readTxtFile(Const.PAGE));
+            this.showCount = Integer.parseInt(Tools.readTxtFile(Constants.PAGE));
         } catch (Exception e) {
             this.showCount = 15;
         }

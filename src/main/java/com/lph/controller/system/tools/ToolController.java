@@ -158,7 +158,7 @@ public class ToolController extends BaseController {
         } else {
             try {
                 //存放路径
-                String filePath = PathUtil.getClasspath() + Const.FILEPATHTWODIMENSIONCODE + encoderImgId;
+                String filePath = PathUtil.getClasspath() + Constants.FILEPATHTWODIMENSIONCODE + encoderImgId;
                 //执行生成二维码
                 TwoDimensionCode.encoderQRCode(encoderContent, filePath, "png");
             } catch (Exception e) {
@@ -190,7 +190,7 @@ public class ToolController extends BaseController {
         } else {
             try {
                 //存放路径
-                String filePath = PathUtil.getClasspath() + Const.FILEPATHTWODIMENSIONCODE + imgId;
+                String filePath = PathUtil.getClasspath() + Constants.FILEPATHTWODIMENSIONCODE + imgId;
                 //执行读取二维码
                 readContent = TwoDimensionCode.decoderQRCode(filePath);
             } catch (Exception e) {

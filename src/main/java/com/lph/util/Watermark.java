@@ -24,16 +24,16 @@ public class Watermark {
 		private	static String strFWATERM,strIWATERM;
 		
 		static{
-			strFWATERM = Tools.readTxtFile(Const.FWATERM);	//读取文字水印配置
-			strIWATERM = Tools.readTxtFile(Const.IWATERM);	//读取图片水印配置
+			strFWATERM = Tools.readTxtFile(Constants.FWATERM);	//读取文字水印配置
+			strIWATERM = Tools.readTxtFile(Constants.IWATERM);	//读取图片水印配置
 		}
 		
 		/**
 		 * 刷新
 		*/
 		public static void fushValue(){
-			strFWATERM = Tools.readTxtFile(Const.FWATERM);	//读取文字水印配置
-			strIWATERM = Tools.readTxtFile(Const.IWATERM);	//读取图片水印配置
+			strFWATERM = Tools.readTxtFile(Constants.FWATERM);	//读取文字水印配置
+			strIWATERM = Tools.readTxtFile(Constants.IWATERM);	//读取图片水印配置
 		}
 			
 		/**
@@ -54,7 +54,7 @@ public class Watermark {
 				String strIW[] = strIWATERM.split(",fh,");
 				if(strIW.length == 4){
 					if("yes".equals(strIW[0])){
-						pressImage(PathUtil.getClasspath() + Const.FILEPATHIMG+strIW[1], imagePath, Integer.parseInt(strIW[2]), Integer.parseInt(strIW[3]));
+						pressImage(PathUtil.getClasspath() + Constants.FILEPATHIMG+strIW[1], imagePath, Integer.parseInt(strIW[2]), Integer.parseInt(strIW[3]));
 					}
 				}
 			}
