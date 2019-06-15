@@ -1,6 +1,5 @@
 package com.lph.controller.system.seccode;
 
-import com.lph.util.Const;
 import com.lph.util.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
@@ -36,7 +35,7 @@ public class SecCodeController {
 
         Subject currentUser = SecurityUtils.getSubject();
         Session session = currentUser.getSession();
-        session.setAttribute(Const.SESSION_SECURITY_CODE, code);
+        session.setAttribute(Constants.SESSION_SECURITY_CODE, code);
 
         try {
             ServletOutputStream out = response.getOutputStream();
